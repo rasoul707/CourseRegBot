@@ -11,7 +11,7 @@ export default function Page() {
 
             <Card fullWidth className="">
                 <CardHeader className="font-black text-blue-900 text-lg text-center items-center justify-center flex flex-col gap-2">
-                    <img src="/logo.svg" className="h-28 py-4"/>
+                    <img src="/logo.svg" className="h-28 py-4" alt="logo"/>
                     ثبت نام دوره جامع ترید
                 </CardHeader>
                 <CardBody className="text-start">
