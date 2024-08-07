@@ -35,7 +35,7 @@ export default function RootLayout({children,}: { children: React.ReactNode; }) 
             suppressHydrationWarning
         >
         <body
-            className={["min-h-screen bg-gradient-to-bl from-blue-400 to-purple-400 overflow-hidden antialiased scroll-smooth h-full", IRANSansX.className].join(" ")}
+            className={["min-h-screen bg-gradient-to-bl from-[#02AABD] to-[#00CDAC] overflow-hidden antialiased scroll-smooth h-full", IRANSansX.className].join(" ")}
         >
         <Providers themeProps={{attribute: "class", defaultTheme: "light"}}>
             <div className="relative flex flex-col h-screen">
