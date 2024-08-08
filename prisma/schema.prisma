@@ -20,4 +20,5 @@ model User {
   username String?
   phoneNumber String?
   licenseToken String?
+  paid Boolean @default(false)
 }
