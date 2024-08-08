@@ -13,6 +13,22 @@ export async function POST(request: NextRequest) {
             },
         }
     )
+    if(!!user) {
+        // @ts-ignore
+        user = await prisma.User.update(
+            {
+                where: {
+                    id: id,
+                },
+                data: {
+                    firstName: first_name || null,
+                    lastName: last_name || null,
+                    username: username || null,
+                    phoneNumber: phone_number || null,
+                },
+            }
+        )
+    }
     if(!user) {
         // @ts-ignore
         user = await prisma.User.create(
@@ -28,6 +44,7 @@ export async function POST(request: NextRequest) {
             }
         )
     }
+
     // @ts-ignore
     return Response.json({ok: true, user})
 }
