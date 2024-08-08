@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import prisma from "@/lib/prisma";
+import axios from "axios";
 
 
 
@@ -22,18 +23,24 @@ export async function POST(request: NextRequest, { params }: { params: { id: num
         return Response.json({ok: false, error: "NOT_PAID"})
     }
     if(!user.licenseToken) {
-        const token = "112233445566778899"
-        // @ts-ignore
-        user = await prisma.User.update(
-            {
-                where: {
-                    id: +id,
-                },
-                data: {
-                    licenseToken: token
-                },
-            }
-        )
+        try {
+            const {data} = await axios.post("https://panel.spotplayer.ir/license/edit/")
+            const token = data.key
+            // @ts-ignore
+            user = await prisma.User.update(
+                {
+                    where: {
+                        id: +id,
+                    },
+                    data: {
+                        licenseToken: token
+                    },
+                }
+            )
+        } catch (e) {
+            // @ts-ignore
+            return Response.json({ok: false, user})
+        }
     }
 
     // @ts-ignore
