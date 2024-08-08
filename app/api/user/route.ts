@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
                     firstName: first_name || null,
                     lastName: last_name || null,
                     username: username || null,
-                    phoneNumber: phone_number || null,
+                    phoneNumber: phone_number || user.phoneNumber || null,
                 },
             }
         )
