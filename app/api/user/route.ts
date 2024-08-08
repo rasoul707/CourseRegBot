@@ -48,3 +48,20 @@ export async function POST(request: NextRequest) {
     // @ts-ignore
     return Response.json({ok: true, user})
 }
+
+
+
+export async function GET(request: NextRequest) {
+    const body = await request.json()
+    const {id} = body
+    // @ts-ignore
+    let user = await prisma.User.findUnique(
+        {
+            where: {
+                id,
+            },
+        }
+    )
+    // @ts-ignore
+    return Response.json({ok: true, user})
+}
