@@ -3,8 +3,7 @@ import prisma from "@/lib/prisma";
 import axios from "axios";
 
 
-
-export async function POST(request: NextRequest, { params }: { params: { id: number } }) {
+export async function POST(request: NextRequest, {params}: { params: { id: number } }) {
     const {id} = params
     // @ts-ignore
     let user = await prisma.User.findUnique(
@@ -14,17 +13,22 @@ export async function POST(request: NextRequest, { params }: { params: { id: num
             },
         }
     )
-    if(!user) {
+    if (!user) {
         // @ts-ignore
         return Response.json({ok: false, error: "USER_NOT_FOUND"})
     }
-    if(!user.paid) {
+    if (!user.paid) {
         // @ts-ignore
         return Response.json({ok: false, error: "NOT_PAID"})
     }
-    if(!user.licenseToken) {
+    if (!user.licenseToken) {
         try {
-            const {data} = await axios.post("https://panel.spotplayer.ir/license/edit/")
+            const dd = {
+                course: ["66b475cc00ec4c8a9a1b21f2"],
+                name: `${user.firstName} ${user.lastName}`,
+                watermark: {texts: [{text: "0" + user.phoneNumber?.substring(3) || "-"}]}
+            }
+            const {data} = await axios.post("https://panel.spotplayer.ir/license/edit/", dd)
             const token = data.key
             // @ts-ignore
             user = await prisma.User.update(
