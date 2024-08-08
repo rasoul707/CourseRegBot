@@ -9,7 +9,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     let user = await prisma.User.findUnique(
         {
             where: {
-                id: parseInt(id),
+                id: +id,
             },
         }
     )

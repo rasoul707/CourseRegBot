@@ -3,13 +3,13 @@ import prisma from "@/lib/prisma";
 
 
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }: { params: { id: number } }) {
     const {id} = params
     // @ts-ignore
     let user = await prisma.User.findUnique(
         {
             where: {
-                id: parseInt(id),
+                id: +id,
             },
         }
     )
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         user = await prisma.User.update(
             {
                 where: {
-                    id: id,
+                    id: +id,
                 },
                 data: {
                     licenseToken: token
