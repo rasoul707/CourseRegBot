@@ -2,9 +2,9 @@ import {NextRequest, NextResponse} from "next/server";
 import prisma from "@/lib/prisma";
 
 
-export async function POST(request: NextRequest) {
-    const body = await request.json()
-    const {id} = body
+
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+    const {id} = params
     // @ts-ignore
     let user = await prisma.User.findUnique(
         {
