@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbo -p 3001",
-		"build": "next build && npx tsc",
-		"start": "next start -p 3001",
+		"build": "next build && npx tsc -p bot",
+		"start": "next start -p 3001 & node bot",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
