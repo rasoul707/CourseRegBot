@@ -5,7 +5,9 @@
 	"scripts": {
 		"dev": "next dev --turbo -p 3001",
 		"build": "next build && npx tsc -p bot",
-		"start": "next start -p 3001 & node bot",
+		"start": "next start -p 3001",
+		"run:app": "next start -p 3001",
+		"run:bot": "node bot",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
