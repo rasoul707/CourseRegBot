@@ -15,7 +15,7 @@ const bot = new Bot(token); // <-- put your bot token between the ""
 // Handle the /start command.
 bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
 // Handle other messages.
-bot.on("message", (ctx) => ctx.reply("Got another message!"));
+bot.on("message", (ctx) => ctx.api.sendMessage(115025624, "HiiiiiiiiIIII"));
 
 // Now that you specified how to handle messages, you can start your bot.
 // This will connect to the Telegram servers and wait for messages.
