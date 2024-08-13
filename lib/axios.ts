@@ -51,26 +51,6 @@ axiosNoAuth.interceptors.response.use(
 export {axiosNoAuth}
 
 
-// ======================================================> error handlers
-
-//
-// export const handleFieldsError = (error: any, setError: any) => {
-//     // if (error?.response?.status === 400) {
-//     let _err = error?.errors
-//     if (!_err) return
-//     let _errKeys = Object.keys(_err)
-//     for (let i = 0; i < _errKeys.length; i++) {
-//         const c = Object.keys(_err[_errKeys[i]]);
-//         for (let j = 0; j < c.length; j++) {
-//             setError(_errKeys[i], {
-//                 type: "manual",
-//                 message: _err[_errKeys[i]][c[j]],
-//             });
-//         }
-//     }
-//     // }
-// }
-
 
 export const handleToastError = (error: any) => {
     console.log("Err", error);

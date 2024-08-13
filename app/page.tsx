@@ -2,18 +2,44 @@
 
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 import {Radio, RadioGroup} from "@nextui-org/radio";
+import {useEffect} from "react";
+import {axiosNoAuth} from "@/lib/axios";
+
 
 
 export default function Page() {
 
+    useEffect(() => {
+        // @ts-ignore
+        if(window?.Telegram?.WebApp) {
+            console.log("##################")
+            getAuth()
+            getCourse()
+            // @ts-ignore
+            window.Telegram.WebApp.expand()
+        }
+    }, []);
 
+    const getAuth = async () => {
+        // @ts-ignore
+        console.log("@@@@@@@@@@", window.Telegram?.WebApp.initData)
+        // @ts-ignore
+        console.log("$$$$$$$$$$", window.Telegram?.WebApp.initDataUnsafe)
+        const user = await axiosNoAuth.get("/user")
+        console.log(user, "user")
+    }
+
+    const getCourse = async () => {
+        const course = await axiosNoAuth.get("/course")
+        console.log(course, "course")
+    }
 
     return (
         <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
             <Card fullWidth className="">
                 <CardHeader
                     className="font-black text-blue-900 text-lg text-center items-center justify-center flex flex-col gap-2">
-                    <img src="/logo.png" className="h-28 py-4" alt="logo"/>
+                    <img alt="logo" className="h-28 py-4" src="/logo.png"/>
                     <span>ثبت نام کلاس آنلاین گلدن تریدر</span>
                 </CardHeader>
                 <CardBody className="text-start">

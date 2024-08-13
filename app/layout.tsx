@@ -34,6 +34,9 @@ export default function RootLayout({children,}: { children: React.ReactNode; }) 
             className="selection:bg-primary/25 selection:text-primary select-none h-full"
             suppressHydrationWarning
         >
+        <head>
+            <script src="https://telegram.org/js/telegram-web-app.js"/>
+        </head>
         <body
             className={["min-h-screen bg-gradient-to-bl from-[#02AABD] to-[#00CDAC] overflow-hidden antialiased scroll-smooth h-full", IRANSansX.className].join(" ")}
         >

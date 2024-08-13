@@ -1,50 +1,35 @@
 import {NextRequest, NextResponse} from "next/server";
+
 import prisma from "@/lib/prisma";
 
-
+// create user
 export async function POST(request: NextRequest) {
-    const body = await request.json()
-    const {id, first_name, last_name, username, phone_number} = body
-    // @ts-ignore
-    let user = await prisma.User.findUnique(
-        {
-            where: {
-                id,
-            },
-        }
-    )
-    if(!!user) {
-        // @ts-ignore
-        user = await prisma.User.update(
-            {
-                where: {
-                    id: id,
-                },
-                data: {
-                    firstName: first_name || null,
-                    lastName: last_name || null,
-                    username: username || null,
-                    phoneNumber: phone_number || user.phoneNumber || null,
-                },
-            }
-        )
-    }
-    if(!user) {
-        // @ts-ignore
-        user = await prisma.User.create(
-            {
-                data: {
-                    id: id,
-                    firstName: first_name || null,
-                    lastName: last_name || null,
-                    username: username || null,
-                    phoneNumber: phone_number || null,
-                    licenseToken: null,
-                },
-            }
-        )
+    const body = await request.json();
+
+    if(!!body.phoneNumber) {
+        body.phoneNumber = !!body.phoneNumber ? (!body.phoneNumber.includes("+") ? ("+" + body.phoneNumber) : body.phoneNumber) : null
     }
 
     // @ts-ignore
-    return Response.json({ok: true, user})
+    const user = await prisma.User.upsert({
+        where: {id: +body.id},
+        create: {
+            ...body,
+            id: +body.id,
+        },
+        update: {
+            ...body,
+        },
+    });
+
+    return NextResponse.json({user});
+}
+
+
+// get users list
+export async function GET(request: NextRequest) {
+    // @ts-ignore
+    const users = await prisma.User.findMany()
+
+    return NextResponse.json({users})
 }
