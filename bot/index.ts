@@ -1,6 +1,6 @@
 import {Bot, GrammyError, HttpError, InlineKeyboard, Keyboard} from "grammy";
 import axios from "axios";
-import dotenv from "dotenv"
+import * as dotenv from "dotenv"
 dotenv.config();
 
 
@@ -66,7 +66,7 @@ const _checkStatus = async (ctx: any) => {
         } else if (!!result.user.paid) {
             return await _generateLicense(ctx)
         } else if (!!result.user.phoneNumber) {
-            return await showMiniApp(ctx)
+            return await _showMiniApp(ctx)
         } else if (!!ctx.message.contact) {
             return await _registerComplete(ctx)
         } else {
@@ -126,7 +126,7 @@ const _registerComplete = async (ctx: any) => {
     await ctx.api.sendMessage(ctx.chat.id, text, {reply_markup: keyboard})
 
     setTimeout(async () => {
-        await checkStatus(ctx)
+        await _checkStatus(ctx)
     }, 1000)
 }
 
