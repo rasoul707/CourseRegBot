@@ -1,6 +1,6 @@
 import {Bot, GrammyError, HttpError, InlineKeyboard, Keyboard} from "grammy";
 import * as dotenv from "dotenv"
-import {axiosNoAuth} from "../lib/axios";
+import {axiosServer} from "../lib/axios";
 
 dotenv.config();
 
@@ -42,7 +42,7 @@ const _checkStatus = async (ctx: any) => {
         lastName: ctx.from.last_name,
         username: ctx.from.username,
     }
-    const {data: result} = await axiosNoAuth.post("user", data)
+    const {data: result} = await axiosServer.post("user", data)
 
     if (!!result.user.phoneNumber) {
         return await showMainMenu(ctx)
@@ -69,7 +69,7 @@ const savePhoneNumber = async (ctx: any) => {
         username: ctx.from.username,
         phoneNumber: ctx.message.contact.phone_number
     }
-    await axiosNoAuth.post("user", data)
+    await axiosServer.post("user", data)
 
     const keyboard = new Keyboard()
         .text("منوی اصلی")

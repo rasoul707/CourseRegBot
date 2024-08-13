@@ -1,5 +1,5 @@
 import axios from "axios";
-import {toast} from "@/lib/toast";
+
 
 
 const config = {
@@ -52,17 +52,38 @@ export {axiosNoAuth}
 
 
 
+
+// **********************
+// C: axios without auth server side
+const axiosServer = axios.create(config)
+axiosNoAuth.interceptors.response.use(
+    (response: any) => {
+        return response;
+    },
+    (error: any) => {
+        return Promise.reject(error.response.data)
+    },
+);
+export {axiosServer}
+
+
+
+
+
+
 export const handleToastError = (error: any) => {
     console.log("Err", error);
     const response = error.response
-    const messages = [];
+    const messages: any[] = [];
     if (!response) {
         messages.push("خطای شبکه");
     } else {
         messages.push(response?.data?.message || response?.data?.error || `خطای ناشتاخته: ${response.status}`);
     }
     // show messages
-    messages.map(message => toast(message, "error"));
+    import("@/lib/toast").then(widget => {
+        messages.map(message => widget.toast(message, "error"));
+    });
 };
 
 
