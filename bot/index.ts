@@ -55,10 +55,36 @@ const _checkStatus = async (ctx: any) => {
 
 
 const showMainMenu = async (ctx: any) => {
-    const text = "جهت ثبت نام در کلاس روی دکمه زیر کلیک کنید"
-    const keyboard = new InlineKeyboard()
-        .webApp("ثبت نام", "https://classregbot.mentorader.ir/")
-    await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
+    const {data: {user}} = await axiosServer.get("user", {params: {id: ctx.from.id}})
+    const {data: {courses}} = await axiosServer.get("course")
+
+
+
+    if (!courses?.length) {
+        const text = "هنوز هیچ کلاسی پیدا نشد. مجددا بعدا تلاش کنید."
+        const keyboard = new InlineKeyboard()
+
+        if (user.isAdmin) {
+            keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin")
+        }
+        return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
+    } else {
+        const text = "کلاس را انتخاب کنید:"
+        const keyboard = new InlineKeyboard()
+
+        for (let i = 0; i < courses.length; i++) {
+            const c = courses[i]
+            keyboard.webApp(c.title, `https://classregbot.mentorader.ir/course/${c.id}`)
+        }
+
+        if (user.isAdmin) {
+            keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin")
+        }
+        return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
+    }
+
+
+
 }
 
 const savePhoneNumber = async (ctx: any) => {
@@ -79,7 +105,7 @@ const savePhoneNumber = async (ctx: any) => {
     await ctx.api.sendMessage(ctx.chat.id, text, {reply_markup: keyboard})
 
     setTimeout(async () => {
-        await _checkStatus(ctx)
+        await showMainMenu(ctx)
     }, 1000)
 }
 
