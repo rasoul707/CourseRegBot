@@ -44,27 +44,31 @@ const _checkStatus = async (ctx: any) => {
     }
     const {data: result} = await axiosServer.post("user", data)
 
+    if (!result.user.isActive) {
+        return await userInactive(ctx)
+    }
     if (!!result.user.phoneNumber) {
         return await showMainMenu(ctx)
-    } else if (!!ctx.message.contact) {
+    }
+    if (!!ctx.message.contact) {
         return await savePhoneNumber(ctx)
-    } else if (!result.user.phoneNumber) {
+    }
+    if (!result.user.phoneNumber) {
         return await sendPhoneNumberRequest(ctx)
     }
 }
 
 
 const showMainMenu = async (ctx: any) => {
-    const {data: {user}} = await axiosServer.get("user", {params: {id: ctx.from.id}})
-    const {data: {courses}} = await axiosServer.get("course")
+    const {data: resultUser} = await axiosServer.get("user", {params: {id: ctx.from.id}})
+    const {data: resultCourses} = await axiosServer.get("course")
 
 
-
-    if (!courses?.length) {
+    if (!resultCourses.courses?.length) {
         const text = "هنوز هیچ کلاسی پیدا نشد. مجددا بعدا تلاش کنید."
         const keyboard = new InlineKeyboard()
 
-        if (user.isAdmin) {
+        if (resultUser.user.isAdmin) {
             keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin")
         }
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
@@ -72,17 +76,16 @@ const showMainMenu = async (ctx: any) => {
         const text = "کلاس را انتخاب کنید:"
         const keyboard = new InlineKeyboard()
 
-        for (let i = 0; i < courses.length; i++) {
-            const c = courses[i]
+        for (let i = 0; i < resultCourses.courses.length; i++) {
+            const c = resultCourses.courses[i]
             keyboard.webApp(c.title, `https://classregbot.mentorader.ir/course/${c.id}`)
         }
 
-        if (user.isAdmin) {
+        if (resultUser.user.isAdmin) {
             keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin")
         }
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
     }
-
 
 
 }
@@ -117,6 +120,12 @@ const sendPhoneNumberRequest = async (ctx: any) => {
         .resized()
     keyboard.one_time_keyboard = true
     await ctx.api.sendMessage(ctx.chat.id, text, {reply_markup: keyboard})
+}
+
+
+const userInactive = async (ctx: any) => {
+    const text = "اکانت شما موقتا غیر فعال شده است"
+    await ctx.api.sendMessage(ctx.chat.id, text)
 }
 
 
