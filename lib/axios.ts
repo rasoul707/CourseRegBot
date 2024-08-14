@@ -1,4 +1,5 @@
 import axios from "axios";
+import {toast} from "@/lib/toast";
 
 
 
@@ -36,6 +37,10 @@ axiosAuth.interceptors.response.use(
 export {axiosAuth}
 
 
+
+
+
+
 // **********************
 // B: axios without auth
 const axiosNoAuth = axios.create(config)
@@ -53,23 +58,6 @@ export {axiosNoAuth}
 
 
 
-// **********************
-// C: axios without auth server side
-const axiosServer = axios.create(config)
-axiosNoAuth.interceptors.response.use(
-    (response: any) => {
-        return response;
-    },
-    (error: any) => {
-        return Promise.reject(error.response.data)
-    },
-);
-export {axiosServer}
-
-
-
-
-
 
 export const handleToastError = (error: any) => {
     console.log("Err", error);
@@ -80,10 +68,7 @@ export const handleToastError = (error: any) => {
     } else {
         messages.push(response?.data?.message || response?.data?.error || `خطای ناشتاخته: ${response.status}`);
     }
-    // show messages
-    import("@/lib/toast").then(widget => {
-        messages.map(message => widget.toast(message, "error"));
-    });
+    messages.map(message => toast(message, "error"));
 };
 
 
