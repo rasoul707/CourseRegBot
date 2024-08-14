@@ -1,6 +1,6 @@
 import {Bot, GrammyError, HttpError, InlineKeyboard, Keyboard} from "grammy";
 import * as dotenv from "dotenv"
-import {axiosServer} from "../lib/axios";
+import {axiosServer} from "../lib/axiosServer";
 
 dotenv.config();
 
