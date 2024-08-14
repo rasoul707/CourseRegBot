@@ -65,7 +65,7 @@ const showMainMenu = async (ctx: any) => {
 
 
     if (!resultCourses.courses?.length) {
-        const text = "هنوز هیچ کلاسی پیدا نشد، مجددا بعدا تلاش کنید!"
+        const text = "هنوز هیچ کلاسی پیدا نشد، مجددا بعدا تلاش کنید"
         const keyboard = new InlineKeyboard()
 
         if (resultUser.user.isAdmin) {
