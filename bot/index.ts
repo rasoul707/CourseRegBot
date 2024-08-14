@@ -60,7 +60,7 @@ const _checkStatus = async (ctx: any) => {
 
 
 const showMainMenu = async (ctx: any) => {
-    const {data: resultUser} = await axiosServer.get("user", {params: {id: ctx.from.id}})
+    const {data: resultUser} = await axiosServer.get(`user/${ctx.from.id}`)
     const {data: resultCourses} = await axiosServer.get("course")
 
 
