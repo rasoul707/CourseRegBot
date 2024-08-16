@@ -22,24 +22,32 @@ export default function Page({params}: { params: { id: string } }) {
         if (window?.Telegram?.WebApp) {
             // @ts-ignore
             window.Telegram.WebApp.expand()
-            await getUser()
+            await auth()
             await getCourse()
         }
-
-
-
         setLoading(false)
     }
 
-    const getUser = async () => {
+    const auth = async () => {
         // @ts-ignore
-        console.log({i: window.Telegram?.WebApp.initData, n: window.Telegram?.WebApp.initDataUnsafe})
-        // @ts-ignore
-        // console.log("@@@@@@@@@@", window.Telegram?.WebApp.initData)
-        // @ts-ignore
-        // console.log("$$$$$$$$$$", window.Telegram?.WebApp.initDataUnsafe)
-        // const user = await axiosNoAuth.get(`/user/${}`)
-        // console.log(user, "user")
+        const ut = window.Telegram?.WebApp.initDataUnsafe
+        const user = ut.user
+        return new Promise(async (resolve, reject) => {
+            try {
+                const _data = {
+                    id: user.id,
+                    firstName: user.first_name,
+                    lastName: user.last_name,
+                    username: user.username,
+                }
+                const {data} = await axiosNoAuth.post(`/user`, _data)
+                setUser(data.user)
+                resolve(data.user)
+            } catch (e) {
+                setUser(null)
+                resolve(false)
+            }
+        })
     }
 
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -53,7 +61,8 @@ export default function Page({params}: { params: { id: string } }) {
                 setCourse(data.course)
                 resolve(data.course)
             } catch (e) {
-                reject()
+                setCourse(null)
+                resolve(false)
             }
         })
     }
@@ -87,11 +96,20 @@ export default function Page({params}: { params: { id: string } }) {
             </div>
         )
     }
-    if (!user.isActive) {
+    if (!user?.isActive) {
         return (
             <div className="h-full flex justify-center items-center">
                 <span className="text-lg text-red-600 font-bold">
                     شما مجاز به ثبت نام نیستید :/
+                </span>
+            </div>
+        )
+    }
+    if (!user?.phoneNumber) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    شماره موبایل خود را ثبت نکرده اید :/
                 </span>
             </div>
         )
@@ -117,6 +135,14 @@ export default function Page({params}: { params: { id: string } }) {
     return (
         <div className="flex flex-col h-full justify-between p-2 overflow-hidden">
             <div className="flex flex-col gap-5">
+                <div className="flex gap-2 bg-gray-200 p-4 rounded-xl">
+                    <span className="font-bold">
+                        کاربر:
+                    </span>
+                    <span>
+                        {user.firstName + " " + user.lastName}
+                    </span>
+                </div>
                 <div
                     className="font-black text-blue-900 text-lg text-center items-center justify-center flex flex-col gap-4"
                 >
