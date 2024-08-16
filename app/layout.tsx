@@ -13,7 +13,6 @@ export const metadata: Metadata = {
         default: siteConfig.name,
         template: `%s - ${siteConfig.name}`,
     },
-    description: siteConfig.description,
     icons: {
         icon: "/favicon.ico",
     },
@@ -24,9 +23,13 @@ export const viewport: Viewport = {
         {media: "(prefers-color-scheme: light)", color: "white"},
         {media: "(prefers-color-scheme: dark)", color: "black"},
     ],
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
 };
 
-export default function RootLayout({children,}: { children: React.ReactNode; }) {
+export default function RootLayout({children}: { children: React.ReactNode; }) {
     return (
         <html
             lang="fa-IR"
@@ -42,18 +45,7 @@ export default function RootLayout({children,}: { children: React.ReactNode; }) 
         >
         <Providers themeProps={{attribute: "class", defaultTheme: "light"}}>
             <div className="relative flex flex-col h-screen">
-                <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-                    {children}
-                </main>
-                <footer className="w-full flex items-center justify-center p-3">
-                    <Button
-                        fullWidth
-                        size="lg"
-                        color="primary"
-                    >
-                        پرداخت
-                    </Button>
-                </footer>
+                {children}
             </div>
         </Providers>
         </body>
