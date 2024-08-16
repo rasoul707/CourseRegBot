@@ -1,19 +1,101 @@
 "use client"
 
-import React from "react";
-import {Card, CardBody, CardHeader} from "@nextui-org/card";
-import {Tab, Tabs} from "@nextui-org/tabs";
+import React, {useEffect, useState} from "react";
+
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/navbar";
 import {Link} from "@nextui-org/link";
-import {Button} from "@nextui-org/button";
 import {usePathname} from "next/navigation";
+import {axiosNoAuth} from "@/lib/axios";
+import {Spinner} from "@nextui-org/spinner";
 
 
 export default function AdminLayout({children}: { children: React.ReactNode; }) {
 
     const pathname = usePathname()
 
+    useEffect(() => {
+        initializing()
+    }, []);
 
+    const initializing = async () => {
+        // @ts-ignore
+        if (window?.Telegram?.WebApp) {
+            // @ts-ignore
+            window.Telegram.WebApp.expand()
+            await auth()
+        }
+        setLoading(false)
+    }
+
+    const auth = async () => {
+        // @ts-ignore
+        const ut = window.Telegram?.WebApp.initDataUnsafe
+        const user = ut.user
+        return new Promise(async (resolve, reject) => {
+            try {
+                const _data = {
+                    id: user.id,
+                    firstName: user.first_name,
+                    lastName: user.last_name,
+                    username: user.username,
+                }
+                const {data} = await axiosNoAuth.post(`/user`, _data)
+                setUser(data.user)
+                resolve(data.user)
+            } catch (e) {
+                setUser(null)
+                resolve(false)
+            }
+        })
+    }
+
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [user, setUser] = useState<any>(null)
+
+
+    if (isLoading) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <Spinner size="lg"/>
+            </div>
+        )
+    }
+    if (!user) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    احراز هویت موفقیت آمیز نبود :/
+                </span>
+            </div>
+        )
+    }
+    if (!user?.isActive) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    شما مجاز به ثبت نام نیستید :/
+                </span>
+            </div>
+        )
+    }
+    if (!user?.phoneNumber) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    شماره موبایل خود را ثبت نکرده اید :/
+                </span>
+            </div>
+        )
+    }
+    if (!user?.isAdmin) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    شما دسترسی به این صفحه ندارید :/
+                </span>
+            </div>
+        )
+    }
     return (
         <main className="container mx-auto max-w-7xl flex-grow">
             <section className="flex flex-col justify-center gap-4">
