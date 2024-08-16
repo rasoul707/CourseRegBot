@@ -54,11 +54,6 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
                                 کاربران
                             </Link>
                         </NavbarItem>
-                        <NavbarItem isActive={pathname === "/admin/payment"}>
-                            <Link color={pathname === "/admin/payment" ? "primary" : "foreground"} href="/admin/payment">
-                                پرداخت ها
-                            </Link>
-                        </NavbarItem>
                     </NavbarContent>
                 </Navbar>
                 {children}

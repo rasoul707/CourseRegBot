@@ -30,12 +30,17 @@ model Course {
 }
 
 model Payment {
-  id       Int     @id @default(autoincrement())
-  courseId Int
-  userId   Int
-  success  Boolean @default(false)
-  course   Course  @relation(fields: [courseId], references: [id])
-  user     User    @relation(fields: [userId], references: [id])
+  id            Int      @id @default(autoincrement())
+  courseId      Int
+  userId        Int
+  success       Boolean?
+  cardNumber    String?
+  price         Int
+  refNumber     String?
+  trackingCode  String?
+  transactionId String?
+  course        Course   @relation(fields: [courseId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model Licesnse {

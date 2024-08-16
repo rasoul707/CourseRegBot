@@ -28,16 +28,16 @@ const columns = [
 ];
 
 export default function Page() {
-
+    const [isLoading, setIsLoading] = React.useState(true);
     const [courses, setCourses] = useState<any>([])
     const getCourses = async () => {
         try {
             const {data} = await axiosNoAuth.get("course")
             setCourses(data.courses)
+            setIsLoading(false)
         } catch (e) {
-            //
+            setIsLoading(false)
         }
-
     }
 
     useEffect(() => {
@@ -58,15 +58,25 @@ export default function Page() {
                             height={80}
                             width={80}
                         />
-                        <h6>
-                            {cellValue}
-                        </h6>
+                        <span className="flex flex-col gap-2">
+                            <div className="flex gap-2">
+                                <span className="font-bold">
+                                    شناسه:
+                                </span>
+                                <span className="select-all">
+                                    {c.id}
+                                </span>
+                            </div>
+                            <h5 className="font-black text-lg">
+                                {cellValue}
+                            </h5>
+                        </span>
                     </div>
                 )
             case "price":
                 return (
                     <span className="flex flex-col">
-                        {cellValue} تومان
+                        {cellValue.toLocaleString()} ریالء
                     </span>
                 );
             case "status":
@@ -120,7 +130,7 @@ export default function Page() {
                     </Button>
                 </CardHeader>
                 <CardBody className="items-start">
-                    <Table aria-label="Example table with custom cells">
+                    <Table>
                         <TableHeader columns={columns}>
                             {(column) => (
                                 <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -128,18 +138,18 @@ export default function Page() {
                                 </TableColumn>
                             )}
                         </TableHeader>
-                        {!!courses.length
-                            ?
-                            <TableBody items={courses}>
-                                {(item: Course) => (
-                                    <TableRow key={item.id}>
-                                        {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                            :
-                            <TableBody emptyContent={"موردی یافت نشد"} items={[]}>{}</TableBody>
-                        }
+                        <TableBody
+                            items={courses}
+                            isLoading={isLoading}
+                            loadingContent={<Spinner label="در حال دریافت..."/>}
+                            emptyContent={"موردی یافت نشد"}
+                        >
+                            {(item: Course) => (
+                                <TableRow key={item.id}>
+                                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                </TableRow>
+                            )}
+                        </TableBody>
                     </Table>
                 </CardBody>
             </Card>
@@ -179,7 +189,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
     }
 
     useEffect(() => {
-        if(state.isOpen) onGetCourse()
+        if (state.isOpen) onGetCourse()
     }, [state.isOpen, id])
 
     useEffect(() => {
@@ -306,6 +316,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                                         isReadOnly={isSubmitting}
                                         isInvalid={!!errors.price}
                                         errorMessage={errors.price?.message}
+                                        description="به ریال وارد شود"
                                     />
                                     <Checkbox
                                         {...isActiveField}
