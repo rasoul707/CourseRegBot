@@ -72,7 +72,12 @@ export default function Page({params}: { params: { id: string } }) {
     const onStartPayment = async () => {
         setPaymentLoading(true)
         try {
-            const {data} = await axiosNoAuth.get(`/payment/${course.id}`)
+            const _data = {
+                userId: user.id,
+                courseId: course.id,
+                paymentType
+            }
+            const {data} = await axiosNoAuth.post(`/payment`, _data)
             toast.success("در حال انتقال به درگاه پرداخت ...")
         } catch (e) {
             toast.error(JSON.stringify(e))
