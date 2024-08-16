@@ -33,7 +33,7 @@ export default function Page({params}: { params: { id: string } }) {
 
     const getUser = async () => {
         // @ts-ignore
-        setUser({i: window.Telegram?.WebApp.initData, n: window.Telegram?.WebApp.initDataUnsafe})
+        console.log({i: window.Telegram?.WebApp.initData, n: window.Telegram?.WebApp.initDataUnsafe})
         // @ts-ignore
         // console.log("@@@@@@@@@@", window.Telegram?.WebApp.initData)
         // @ts-ignore
@@ -154,9 +154,6 @@ export default function Page({params}: { params: { id: string } }) {
                     </Radio>
                 </RadioGroup>
             </div>
-            <pre>
-                {JSON.stringify(user)}
-            </pre>
             <Button
                 fullWidth
                 size="lg"
