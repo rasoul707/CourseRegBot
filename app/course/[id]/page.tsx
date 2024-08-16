@@ -87,11 +87,29 @@ export default function Page({params}: { params: { id: string } }) {
             </div>
         )
     }
+    if (!user.isActive) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    شما مجاز به ثبت نام نیستید :/
+                </span>
+            </div>
+        )
+    }
     if (!course) {
         return (
             <div className="h-full flex justify-center items-center">
                 <span className="text-lg text-red-600 font-bold">
                     کلاس مورد نظر پیدا نشد :/
+                </span>
+            </div>
+        )
+    }
+    if (!course?.isActive) {
+        return (
+            <div className="h-full flex justify-center items-center">
+                <span className="text-lg text-red-600 font-bold">
+                    کلاس مورد نظر غیر فعال شده است :/
                 </span>
             </div>
         )
