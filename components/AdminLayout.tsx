@@ -22,6 +22,8 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
         if (window?.Telegram?.WebApp) {
             // @ts-ignore
             window.Telegram.WebApp.expand()
+            // @ts-ignore
+            window.Telegram.WebApp.enableClosingConfirmation()
             await auth()
         }
         setLoading(false)

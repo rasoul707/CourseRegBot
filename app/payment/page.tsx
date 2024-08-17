@@ -4,6 +4,8 @@ import React, {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {Spinner} from "@nextui-org/spinner";
 import {axiosNoAuth} from "@/lib/axios";
+import {Button} from "@nextui-org/button";
+import {toast} from "@/lib/toast";
 
 
 export default function Page() {
@@ -26,33 +28,13 @@ export default function Page() {
         if (window?.Telegram?.WebApp) {
             // @ts-ignore
             window.Telegram.WebApp.expand()
-            await auth()
+            // @ts-ignore
+            window.Telegram.WebApp.enableClosingConfirmation()
             await verifyPayment()
         }
         setLoading(false)
     }
 
-    const auth = async () => {
-        // @ts-ignore
-        const ut = window.Telegram?.WebApp.initDataUnsafe
-        const user = ut.user
-        return new Promise(async (resolve, reject) => {
-            try {
-                const _data = {
-                    id: user.id,
-                    firstName: user.first_name,
-                    lastName: user.last_name,
-                    username: user.username,
-                }
-                const {data} = await axiosNoAuth.post(`/user`, _data)
-                setUser(data.user)
-                resolve(data.user)
-            } catch (e) {
-                setUser(null)
-                resolve(false)
-            }
-        })
-    }
 
     const [result, setResult] = useState<any>(null)
     const [error, setError] = useState<any>(null)
@@ -78,8 +60,18 @@ export default function Page() {
         })
     }
 
+    const onBack2Bot = () => {
+        // @ts-ignore
+        if (window?.Telegram?.WebApp) {
+            // @ts-ignore
+            window.Telegram.WebApp.close()
+        }
+        else {
+            toast.info("لطفا مینی اپ را ببندید")
+        }
+    }
 
-    const [user, setUser] = useState<any>(null)
+
     const [isLoading, setLoading] = useState<boolean>(true)
     if (isLoading) {
         return (
@@ -88,15 +80,7 @@ export default function Page() {
             </div>
         )
     }
-    if (!user) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    احراز هویت موفقیت آمیز نبود :/
-                </span>
-            </div>
-        )
-    }
+
 
     if ((!result && error) || (result && !error)) {
         return (
@@ -105,15 +89,24 @@ export default function Page() {
                     پرداخت ناموفق
                 </span>
                 {!!error && (
-                    <span className="text-sm font-light flex flex-col gap-2">
+                    <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                         <div className="flex gap-2">
                             <b>خطا:</b>
                             <span>{JSON.stringify(error)}</span>
                         </div>
+                        <Button
+                            className="my-5"
+                            color="default"
+                            variant="shadow"
+                            size="lg"
+                            onPress={onBack2Bot}
+                        >
+                            بازگشت به ربات
+                        </Button>
                     </span>
                 )}
                 {!!result && (
-                    <span className="text-sm font-light flex flex-col gap-2">
+                    <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                         <div className="flex gap-2">
                             <b>شماره سفارش:</b>
                             <span>{result.orderId}</span>
@@ -122,6 +115,15 @@ export default function Page() {
                             <b>شماره رهگیری:</b>
                             <span>{result.refNumber}</span>
                         </div>
+                        <Button
+                            className="my-5"
+                            color="default"
+                            variant="shadow"
+                            size="lg"
+                            onPress={onBack2Bot}
+                        >
+                            بازگشت به ربات
+                        </Button>
                     </span>
                 )}
             </div>
@@ -147,6 +149,15 @@ export default function Page() {
                     <b>کد رهگیری بانکی:</b>
                     <span>{result?.trackingCode || "-"}</span>
                 </div>
+                <Button
+                    className="my-5"
+                    color="primary"
+                    variant="shadow"
+                    size="lg"
+                    onPress={onBack2Bot}
+                >
+                    دریافت اطلاعات کلاس
+                </Button>
             </span>
         </div>
     )

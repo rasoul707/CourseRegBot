@@ -22,6 +22,8 @@ export default function Page({params}: { params: { id: string } }) {
         if (window?.Telegram?.WebApp) {
             // @ts-ignore
             window.Telegram.WebApp.expand()
+            // @ts-ignore
+            window.Telegram.WebApp.enableClosingConfirmation()
             await auth()
             await getCourse()
         }
