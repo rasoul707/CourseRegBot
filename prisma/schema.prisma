@@ -25,6 +25,7 @@ model Course {
   image     String
   price     Int
   isActive  Boolean    @default(true)
+  uuid      String?
   licesnses Licesnse[]
   payments  Payment[]
 }

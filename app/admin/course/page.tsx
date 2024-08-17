@@ -170,6 +170,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
         title: string;
         image: string;
         price: string;
+        uuid: string;
         isActive: boolean;
     };
 
@@ -199,7 +200,8 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                 title: course?.title || "",
                 image: course?.image || "",
                 price: course?.price.toString() || "",
-                isActive: course?.isActive || true
+                isActive: course?.isActive || true,
+                uuid: course?.uuid || ""
             })
     }, [course])
 
@@ -218,6 +220,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
     const {...imageField} = register("image")
     const {...priceField} = register("price")
     const {...isActiveField} = register("isActive", {value: true})
+    const {...uuidField} = register("uuid")
 
 
     const onSubmit: SubmitHandler<CourseFormType> = async (_data) => {
@@ -309,6 +312,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                                         isInvalid={!!errors.image}
                                         errorMessage={errors.image?.message}
                                     />
+
                                     <Input
                                         label="هزینه ثبت نام"
                                         dir="ltr"
@@ -319,6 +323,16 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                                         isInvalid={!!errors.price}
                                         errorMessage={errors.price?.message}
                                         description="به ریال وارد شود"
+                                    />
+                                    <Input
+                                        label="شناسه ارجاع"
+                                        dir="ltr"
+                                        {...uuidField}
+                                        isDisabled={isSubmitSuccessful}
+                                        isReadOnly={isSubmitting}
+                                        isInvalid={!!errors.uuid}
+                                        errorMessage={errors.uuid?.message}
+                                        description="شناسه ارجاع در اپلیکیشن مربوط وارد شود"
                                     />
                                     <Checkbox
                                         {...isActiveField}

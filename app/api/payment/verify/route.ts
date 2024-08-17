@@ -150,7 +150,7 @@ const successPayment = async (id: number) => {
 
     try {
         const body = {
-            course: ["66b475cc00ec4c8a9a1b21f2"],
+            course: [p.course.uuid],
             name: `${p.user.firstName} ${p.user.lastName}`,
             watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]}
         }
