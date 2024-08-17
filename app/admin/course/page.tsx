@@ -234,6 +234,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
             image: z.string().url("آدرس تصویر نامعتبر است"),
             price: z.string().regex(/^\d+$/, "قیمت نامعتبر است").transform(Number),
             isActive: z.boolean(),
+            uuid: z.string().min(8, "شناسه کوتاه است"),
         }
         const {success, data, error} = z.object(shape).safeParse(_data);
         if (!success) {
