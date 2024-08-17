@@ -10,11 +10,14 @@ export async function GET(request: NextRequest, {params}: { params: { id: string
     const userId = params.id
 
     // @ts-ignore
-    const courses = await prisma.Licesnse.findMany({
+    const list = await prisma.Licesnse.findMany({
         where: {
             userId: +userId
+        },
+        include: {
+            course: true
         }
     })
 
-    return NextResponse.json({courses})
+    return NextResponse.json({list})
 }

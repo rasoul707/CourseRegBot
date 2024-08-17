@@ -13,15 +13,18 @@ import {Spinner} from "@nextui-org/spinner";
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
 
 
-const columns = [
-    {name: "مشخصات اکانت", uid: "info"},
-    {name: "شماره موبایل", uid: "phoneNumber"},
-    {name: "وضعیت", uid: "status"},
-    {name: "دسترسی مدیریت", uid: "admin"},
-    {name: "", uid: "tools"},
-];
+
 
 export default function Page() {
+
+    const columns = [
+        {name: "مشخصات اکانت", uid: "info"},
+        {name: "شماره موبایل", uid: "phoneNumber"},
+        {name: "وضعیت", uid: "status"},
+        {name: "دسترسی مدیریت", uid: "admin"},
+        {name: "", uid: "tools"},
+    ];
+
     const [isLoading, setIsLoading] = React.useState(true);
     const [users, setUsers] = useState<any>([])
     const getUsers = async () => {
@@ -154,18 +157,60 @@ const CoursesTool = ({id}: { id: number }) => {
         if (modal.isOpen) getData()
     }, [modal.isOpen]);
 
-    const [list, setList] = useState([])
+    const [list, setList] = useState<any[]>([])
     const [isLoading, setLoading] = useState(true)
 
     const getData = async () => {
         try {
-            // const {data} = await axiosNoAuth.get("user")
-            // setList(data.list)
-            // setLoading(false)
+            const {data} = await axiosNoAuth.get(`user/${id}/course`)
+            setList(data.list)
+            setLoading(false)
         } catch (e) {
-            // setLoading(false)
+            setLoading(false)
         }
     }
+
+
+    const columns = [
+        {name: "کلاس", uid: "course"},
+        {name: "لایسنس", uid: "token"},
+    ];
+    type ItemType = typeof list[0];
+    const renderCell = React.useCallback((c: ItemType, columnKey: React.Key) => {
+        const cellValue = c[columnKey as keyof ItemType];
+
+        switch (columnKey) {
+            case "course":
+                return (
+                    <div className="flex flex-col gap-2 truncate">
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                شناسه:
+                            </span>
+                            <span className="select-all">
+                                {cellValue.id}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                عنوان:
+                            </span>
+                            <span>
+                                {cellValue.title || "-"}
+                            </span>
+                        </div>
+                    </div>
+                );
+            case "token":
+                return (
+                    <pre className="truncate">
+                        {cellValue}
+                    </pre>
+                );
+            default:
+                return cellValue;
+        }
+    }, []);
 
 
     return (
@@ -176,6 +221,7 @@ const CoursesTool = ({id}: { id: number }) => {
                 isOpen={modal.isOpen}
                 onClose={modal.onClose}
                 placement="bottom-center"
+                scrollBehavior="inside"
                 isDismissable
             >
                 <ModalContent>
@@ -183,7 +229,27 @@ const CoursesTool = ({id}: { id: number }) => {
                         مشاهده لیست کلاس های کاربر
                     </ModalHeader>
                     <ModalBody>
-                        -----
+                        <Table>
+                            <TableHeader columns={columns}>
+                                {(column) => (
+                                    <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                                        {column.name}
+                                    </TableColumn>
+                                )}
+                            </TableHeader>
+                            <TableBody
+                                items={list}
+                                isLoading={isLoading}
+                                loadingContent={<Spinner label="در حال دریافت..."/>}
+                                emptyContent={"موردی یافت نشد"}
+                            >
+                                {(item: ItemType) => (
+                                    <TableRow key={item.id}>
+                                        {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </ModalBody>
                     <ModalFooter>
                         <Button
@@ -219,18 +285,109 @@ const PaymentsTool = ({id}: { id: number }) => {
         if (modal.isOpen) getData()
     }, [modal.isOpen]);
 
-    const [list, setList] = useState([])
+    const [list, setList] = useState<any[]>([])
     const [isLoading, setLoading] = useState(true)
 
     const getData = async () => {
         try {
-            // const {data} = await axiosNoAuth.get("user")
-            // setList(data.list)
-            // setLoading(false)
+            const {data} = await axiosNoAuth.get(`user/${id}/payment`)
+            setList(data.list)
+            setLoading(false)
         } catch (e) {
-            // setLoading(false)
+            setLoading(false)
         }
     }
+
+    const columns = [
+        {name: "کلاس", uid: "course"},
+        {name: "مبلغ پرداختی", uid: "amount"},
+        {name: "نتیجه پرداخت", uid: "status"},
+        {name: "اطلاعات تراکنش", uid: "transaction"},
+    ];
+    type ItemType = typeof list[0];
+    const renderCell = React.useCallback((c: ItemType, columnKey: React.Key) => {
+        const cellValue = c[columnKey as keyof ItemType];
+
+        switch (columnKey) {
+            case "course":
+                return (
+                    <div className="flex flex-col gap-2 truncate">
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                شناسه:
+                            </span>
+                            <span className="select-all">
+                                {cellValue.id}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                عنوان:
+                            </span>
+                            <span>
+                                {cellValue.title || "-"}
+                            </span>
+                        </div>
+                    </div>
+                );
+            case "amount":
+                return (
+                    <span className="flex flex-col truncate">
+                        {cellValue.toLocaleString()} ریالء
+                    </span>
+                );
+            case "status":
+                if (c.success === true) {
+                    return <Chip color="success" className="text-white">موفق</Chip>
+                } else if (c.success === false) {
+                    return <Chip color="danger" className="text-white">ناموفق</Chip>
+                } else {
+                    return <Chip color="default" className="text-black">نامشخص</Chip>
+                }
+            case "transaction":
+                return (
+                    <div className="flex flex-col gap-2 truncate">
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                شناسه رهگیری تراکنش:
+                            </span>
+                            <span className="select-all">
+                                {c.refNumber || "-"}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                شناسه تراکنش:
+                            </span>
+                            <span>
+                                {c.transactionId || "-"}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                شماره کارت:
+                            </span>
+                            <span>
+                                {c.cardNumber || "-"}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <span className="font-bold">
+                                کد رهگیری بانکی:
+                            </span>
+                            <span>
+                                {c.trackingCode || "-"}
+                            </span>
+                        </div>
+                    </div>
+                );
+
+            default:
+                return cellValue;
+        }
+    }, []);
+
+
     return (
         <>
             <Modal
@@ -239,6 +396,7 @@ const PaymentsTool = ({id}: { id: number }) => {
                 isOpen={modal.isOpen}
                 onClose={modal.onClose}
                 placement="bottom-center"
+                scrollBehavior="inside"
                 isDismissable
             >
                 <ModalContent>
@@ -246,7 +404,27 @@ const PaymentsTool = ({id}: { id: number }) => {
                         مشاهده لیست پرداخت های کاربر
                     </ModalHeader>
                     <ModalBody>
-                        -----
+                        <Table>
+                            <TableHeader columns={columns}>
+                                {(column) => (
+                                    <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                                        {column.name}
+                                    </TableColumn>
+                                )}
+                            </TableHeader>
+                            <TableBody
+                                items={list}
+                                isLoading={isLoading}
+                                loadingContent={<Spinner label="در حال دریافت..."/>}
+                                emptyContent={"موردی یافت نشد"}
+                            >
+                                {(item: ItemType) => (
+                                    <TableRow key={item.id}>
+                                        {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </ModalBody>
                     <ModalFooter>
                         <Button

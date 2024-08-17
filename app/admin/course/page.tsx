@@ -274,6 +274,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                 isOpen={state.isOpen}
                 onClose={onClose}
                 placement="bottom-center"
+                scrollBehavior="inside"
                 isDismissable
             >
                 <ModalContent>
