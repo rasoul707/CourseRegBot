@@ -57,6 +57,7 @@ export default function Page() {
                             src={c.image}
                             height={80}
                             width={80}
+                            className="min-w-20"
                         />
                         <span className="flex flex-col gap-2">
                             <div className="flex gap-2">
@@ -67,7 +68,7 @@ export default function Page() {
                                     {c.id}
                                 </span>
                             </div>
-                            <h5 className="font-black text-lg">
+                            <h5 className="font-black text-lg truncate">
                                 {cellValue}
                             </h5>
                         </span>
@@ -75,7 +76,7 @@ export default function Page() {
                 )
             case "price":
                 return (
-                    <span className="flex flex-col">
+                    <span className="flex flex-col truncate">
                         {cellValue.toLocaleString()} ریالء
                     </span>
                 );

@@ -78,9 +78,15 @@ export default function Page({params}: { params: { id: string } }) {
                 paymentType
             }
             const {data} = await axiosNoAuth.post(`/payment`, _data)
-            toast.success("در حال انتقال به درگاه پرداخت ...")
+            if (data.ok) {
+                toast.success("در حال انتقال به درگاه پرداخت ...")
+                setTimeout(() => {
+                    window.location.href = data.url
+                }, 1000)
+            }
         } catch (e) {
-            toast.error(JSON.stringify(e))
+            // @ts-ignore
+            toast.error(e?.data?.error || e)
             setPaymentLoading(false)
         }
     }

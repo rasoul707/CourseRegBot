@@ -46,7 +46,7 @@ export default function Page() {
         switch (columnKey) {
             case "info":
                 return (
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 truncate">
                         <div className="flex gap-2">
                             <span className="font-bold">
                                 شناسه:
@@ -60,7 +60,7 @@ export default function Page() {
                                 نام:
                             </span>
                             <span>
-                                {c.firstName}
+                                {c.firstName || "-"}
                             </span>
                         </div>
                         <div className="flex gap-2">
@@ -68,7 +68,7 @@ export default function Page() {
                                 نام خانوادگی:
                             </span>
                             <span>
-                                {c.lastName}
+                                {c.lastName || "-"}
                             </span>
                         </div>
                         <div className="flex gap-2">
@@ -76,7 +76,7 @@ export default function Page() {
                                 نام کاربری:
                             </span>
                             <span className="select-all">
-                                {c.username}
+                                {c.username || "-"}
                             </span>
                         </div>
                     </div>

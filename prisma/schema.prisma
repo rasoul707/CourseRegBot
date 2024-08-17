@@ -33,14 +33,12 @@ model Payment {
   id            Int      @id @default(autoincrement())
   courseId      Int
   userId        Int
-  price         Int
-
+  success       Boolean?
+  cardNumber    String?
   refNumber     String?
   trackingCode  String?
   transactionId String?
-  success       Boolean?
-  cardNumber    String?
-
+  amount        Int
   course        Course   @relation(fields: [courseId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
 }
