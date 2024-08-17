@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
                 success: false,
             },
         });
-        return NextResponse.json({ok: false, error: "تراکنش ناموفق بود"}, {status: 400})
+        return await failurePayment(payment.id)
     }
     if(status === 1) {
         try {
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
                         success: false,
                     },
                 });
-                return NextResponse.json({ok: false, error: "پرداخت ناموفق بود"}, {status: 400})
+                return await failurePayment(payment.id)
             }
         } catch (e) {
             // @ts-ignore
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
                     success: false,
                 },
             });
-            return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
+            return await failurePayment(payment.id)
         }
     }
 }
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
 
 
-const successPayment = (id: number) => {
+const successPayment = async (id: number) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
         where: {id: id}
@@ -145,5 +145,15 @@ const successPayment = (id: number) => {
     // @@@@@@@@
     // TODO::generate license if not generated before
     // @@@@@@@@
-    return NextResponse.json({ok: true, refNumber: p.refNumber, trackingCode: p.trackingCode})
+    return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode})
+}
+
+
+
+const failurePayment = async(id: number) => {
+    // @ts-ignore
+    const p = await prisma.Payment.findUnique({
+        where: {id: id}
+    })
+    return NextResponse.json({ok: false, orderId: p.id, refNumber: p.refNumber})
 }

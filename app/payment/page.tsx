@@ -27,6 +27,7 @@ export default function Page() {
             // @ts-ignore
             window.Telegram.WebApp.expand()
             await auth()
+            await verifyPayment()
         }
         setLoading(false)
     }
@@ -54,6 +55,7 @@ export default function Page() {
     }
 
     const [result, setResult] = useState<any>(null)
+    const [error, setError] = useState<any>(null)
     const verifyPayment = async () => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -63,13 +65,14 @@ export default function Page() {
                     refNumber,
                     transactionId,
                     cardNumber,
-                    trackingCode
+                    trackingCode,
                 }
                 const {data} = await axiosNoAuth.post(`/payment/verify`, _data)
                 setResult(data)
                 resolve(data)
             } catch (e) {
-                setUser(null)
+                setResult(null)
+                setError(e)
                 resolve(false)
             }
         })
@@ -95,13 +98,56 @@ export default function Page() {
         )
     }
 
-    return (
-        <div className="flex flex-col h-full justify-between p-2  overflow-hidden">
-            <div
-                className="font-black text-blue-900 h-full text-lg text-center items-center justify-center flex flex-col gap-4"
-            >
-                <span>ربات ثبت نام سریع کلاس</span>
+    if ((!result && error) || (result && !error)) {
+        return (
+            <div className="h-full flex flex-col text-red-600 justify-center items-center gap-2">
+                <span className="text-2xl font-bold py-8">
+                    پرداخت ناموفق
+                </span>
+                {!!error && (
+                    <span className="text-sm font-light flex flex-col gap-2">
+                        <div className="flex gap-2">
+                            <b>خطا:</b>
+                            <span>{JSON.stringify(error)}</span>
+                        </div>
+                    </span>
+                )}
+                {!!result && (
+                    <span className="text-sm font-light flex flex-col gap-2">
+                        <div className="flex gap-2">
+                            <b>شماره سفارش:</b>
+                            <span>{result.orderId}</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <b>شماره رهگیری:</b>
+                            <span>{result.refNumber}</span>
+                        </div>
+                    </span>
+                )}
             </div>
+        )
+    }
+
+
+    return (
+        <div className="h-full flex flex-col text-success-600 justify-center items-center gap-2">
+            <span className="text-2xl font-bold py-8">
+                پرداخت موفق
+            </span>
+            <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
+                <div className="flex gap-2">
+                    <b>شماره سفارش:</b>
+                    <span>{result?.orderId || "-"}</span>
+                </div>
+                <div className="flex gap-2">
+                    <b>شماره رهگیری:</b>
+                    <span>{result?.refNumber || "-"}</span>
+                </div>
+                <div className="flex gap-2">
+                    <b>کد رهگیری بانکی:</b>
+                    <span>{result?.trackingCode || "-"}</span>
+                </div>
+            </span>
         </div>
     )
 }
