@@ -87,19 +87,20 @@ export async function POST(request: NextRequest) {
         const order_id = payment.id
         const callback = process.env.NEXT_PUBLIC_PAYSTAR_CALLBACK + "payment"
         const sign = sha512.hmac(process.env.NEXT_PUBLIC_PAYSTAR_KEY || "", `${amount}#${order_id}#${callback}`);
-        console.log(callback)
+        const callback_method = 1
         const body = {
             amount,
             order_id,
             callback,
-            sign
+            sign,
+            callback_method
         }
         const headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + process.env.NEXT_PUBLIC_PAYSTAR_API
         }
         const {data} = await axios.post("https://core.paystar.ir/api/pardakht/create", body, {headers})
-        if (data.status) {
+        if (data.status === 1) {
             // @ts-ignore
             await prisma.Payment.update({
                 where: {
@@ -109,19 +110,10 @@ export async function POST(request: NextRequest) {
                     refNumber: data.data.ref_num
                 },
             });
+            return NextResponse.json({ok: true, url: "https://core.paystar.ir/api/pardakht/payment?token=" + data.data.token})
         }
-        return NextResponse.json({ok: true, url: "https://core.paystar.ir/api/pardakht/payment?token=" + data.data.token})
+        return NextResponse.json({ok: false, error: "پاسخ مناسبی از درگاه دریافت نشد"}, {status: 401})
     } catch (e) {
         return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
     }
-}
-
-
-// get courses list
-export async function GET(request: NextRequest) {
-
-    // @ts-ignore
-    const courses = await prisma.Course.findMany()
-
-    return NextResponse.json({courses})
 }
