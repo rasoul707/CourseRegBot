@@ -7,6 +7,7 @@ import {Button} from "@nextui-org/button";
 import {Spinner} from "@nextui-org/spinner";
 import {Image} from "@nextui-org/image";
 import {toast} from "@/lib/toast";
+import {Snippet} from "@nextui-org/snippet";
 
 
 export default function Page({params}: { params: { id: string } }) {
@@ -26,6 +27,7 @@ export default function Page({params}: { params: { id: string } }) {
             window.Telegram.WebApp.enableClosingConfirmation()
             await auth()
             await getCourse()
+            await getLicense()
         }
         setLoading(false)
     }
@@ -55,6 +57,7 @@ export default function Page({params}: { params: { id: string } }) {
     const [isLoading, setLoading] = useState<boolean>(true)
     const [course, setCourse] = useState<any>(null)
     const [user, setUser] = useState<any>(null)
+    const [license, setLicense] = useState<any>(null)
 
     const getCourse = async () => {
         return new Promise(async (resolve, reject) => {
@@ -64,6 +67,19 @@ export default function Page({params}: { params: { id: string } }) {
                 resolve(data.course)
             } catch (e) {
                 setCourse(null)
+                resolve(false)
+            }
+        })
+    }
+
+    const getLicense = async () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const {data} = await axiosNoAuth.get(`/user/${user.id}/course/${course.id}/license`)
+                setLicense(data.license)
+                resolve(data.license)
+            } catch (e) {
+                setLicense(null)
                 resolve(false)
             }
         })
@@ -145,6 +161,7 @@ export default function Page({params}: { params: { id: string } }) {
             </div>
         )
     }
+
     return (
         <div className="flex flex-col h-full justify-between p-2 overflow-hidden">
             <div className="flex flex-col gap-5">
@@ -166,42 +183,54 @@ export default function Page({params}: { params: { id: string } }) {
                     />
                     <span>{course.title}</span>
                 </div>
-                <RadioGroup
-                    label="روش پرداخت را انتخاب کنید:"
-                    color="primary"
-                    size="lg"
-                    value={paymentType}
-                    onChange={(e) => {
-                        setPaymentType(e.target.value as "irr" | "usdt")
-                    }}
-                    isDisabled={isPaymentLoading}
-                >
-                    <Radio
-                        value="irr"
-                        description={course.price.toLocaleString() + " ریالء"}
-                        classNames={{labelWrapper: "gap-2",}}
+                {!!license && (
+                    <div className="flex flex-col items-start gap-2">
+                        <span>لایسنس شما:</span>
+                        <Snippet variant="bordered" color="secondary">
+                            {license.token}
+                        </Snippet>
+                    </div>
+                )}
+                {!license && (
+                    <RadioGroup
+                        label="روش پرداخت را انتخاب کنید:"
+                        color="primary"
+                        size="lg"
+                        value={paymentType}
+                        onChange={(e) => {
+                            setPaymentType(e.target.value as "irr" | "usdt")
+                        }}
+                        isDisabled={isPaymentLoading}
                     >
-                        <span className="font-bold text-base">پرداخت ریالی</span>
-                    </Radio>
-                    <Radio
-                        value="usdt"
-                        description="به زودی..."
-                        classNames={{labelWrapper: "gap-2",}}
-                        isDisabled
-                    >
-                        <span className="font-bold text-base">پرداخت تتری</span>
-                    </Radio>
-                </RadioGroup>
+                        <Radio
+                            value="irr"
+                            description={course.price.toLocaleString() + " ریالء"}
+                            classNames={{labelWrapper: "gap-2",}}
+                        >
+                            <span className="font-bold text-base">پرداخت ریالی</span>
+                        </Radio>
+                        <Radio
+                            value="usdt"
+                            description="به زودی..."
+                            classNames={{labelWrapper: "gap-2",}}
+                            isDisabled
+                        >
+                            <span className="font-bold text-base">پرداخت تتری</span>
+                        </Radio>
+                    </RadioGroup>
+                )}
             </div>
-            <Button
-                fullWidth
-                size="lg"
-                color="primary"
-                onPress={onStartPayment}
-                isLoading={isPaymentLoading}
-            >
-                پرداخت
-            </Button>
+            {!license && (
+                <Button
+                    fullWidth
+                    size="lg"
+                    color="primary"
+                    onPress={onStartPayment}
+                    isLoading={isPaymentLoading}
+                >
+                    پرداخت
+                </Button>
+            )}
         </div>
     )
 }

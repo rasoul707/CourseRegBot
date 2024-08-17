@@ -140,12 +140,44 @@ export async function POST(request: NextRequest) {
 const successPayment = async (id: number) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
-        where: {id: id}
+        where: {id: id},
+        include: {
+            user: true,
+            course: true,
+        }
     })
-    // @@@@@@@@
-    // TODO::generate license if not generated before
-    // @@@@@@@@
-    return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode})
+
+
+    try {
+        const body = {
+            course: ["66b475cc00ec4c8a9a1b21f2"],
+            name: `${p.user.firstName} ${p.user.lastName}`,
+            watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]}
+        }
+        const headers = {
+            "$API": "ZJQMGL3oMXoBBeu9tYrV6U+qiQJO9w==",
+            "$LEVEL": -1
+        }
+        const {data} = await axios.post("https://panel.spotplayer.ir/license/edit/", body, {headers})
+        const token = data.key
+
+        const _data = {
+            courseId: p.courseId,
+            userId: p.userId,
+            token
+        }
+
+        // @ts-ignore
+        await prisma.License.create(
+            {data: _data}
+        )
+
+    } catch (e) {
+        // @ts-ignore
+        return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode, courseId: p.courseId, error: "خطایی در تولید لایسنس رخ داد. با مدیریت هماهنگ کنید."})
+    }
+
+    return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode, courseId: p.courseId})
 }
 
 

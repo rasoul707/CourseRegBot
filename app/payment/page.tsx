@@ -65,12 +65,14 @@ export default function Page() {
         if (window?.Telegram?.WebApp) {
             // @ts-ignore
             window.Telegram.WebApp.close()
-        }
-        else {
+        } else {
             toast.info("لطفا مینی اپ را ببندید")
         }
     }
-
+    const onGenLicense = () => {
+        const courseId = result.courseId
+        window.location.href = `https://classregbot.mentorader.ir/course/${courseId}`
+    }
 
     const [isLoading, setLoading] = useState<boolean>(true)
     if (isLoading) {
@@ -92,7 +94,7 @@ export default function Page() {
                     <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                         <div className="flex gap-2">
                             <b>خطا:</b>
-                            <span>{JSON.stringify(error)}</span>
+                            <span>{error.error}</span>
                         </div>
                         <Button
                             className="my-5"
@@ -149,15 +151,31 @@ export default function Page() {
                     <b>کد رهگیری بانکی:</b>
                     <span>{result?.trackingCode || "-"}</span>
                 </div>
-                <Button
-                    className="my-5"
-                    color="primary"
-                    variant="shadow"
-                    size="lg"
-                    onPress={onBack2Bot}
-                >
-                    دریافت اطلاعات کلاس
-                </Button>
+                {result.error && (
+                    <>
+                        <span className="text-sm font-bold text-red-600">{result?.error}</span>
+                        <Button
+                            className="my-5"
+                            color="default"
+                            variant="shadow"
+                            size="lg"
+                            onPress={onBack2Bot}
+                        >
+                            بازگشت به ربات
+                        </Button>
+                    </>
+                )}
+                {!result.error && (
+                    <Button
+                        className="my-5"
+                        color="primary"
+                        variant="shadow"
+                        size="lg"
+                        onPress={onGenLicense}
+                    >
+                        دریافت اطلاعات کلاس
+                    </Button>
+                )}
             </span>
         </div>
     )
