@@ -6,7 +6,7 @@ import {Providers} from "./providers";
 import {siteConfig} from "@/config/site";
 import {IRANSansX} from "@/lib/font";
 import {Button} from "@nextui-org/button";
-import React from "react";
+import React, {Suspense} from "react";
 
 export const metadata: Metadata = {
     title: {
@@ -44,9 +44,11 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
             className={["min-h-screen bg-gradient-to-bl from-[#02AABD] to-[#00CDAC] overflow-hidden antialiased scroll-smooth h-full", IRANSansX.className].join(" ")}
         >
         <Providers themeProps={{attribute: "class", defaultTheme: "light"}}>
-            <div className="relative flex flex-col h-screen">
-                {children}
-            </div>
+            <Suspense>
+                <div className="relative flex flex-col h-screen">
+                    {children}
+                </div>
+            </Suspense>
         </Providers>
         </body>
         </html>
