@@ -41,7 +41,7 @@ export default function Page() {
 
     const isFirst = useRef(true)
     const verifyPayment = async () => {
-        if(!isFirst.current) return
+        if (!isFirst.current) return
         isFirst.current = false
         return new Promise(async (resolve, reject) => {
             try {
@@ -92,56 +92,62 @@ export default function Page() {
     console.log("################", result, error)
 
 
-    if ((!result && error) || (result && !error)) {
+    if (!!result && !result.ok) {
         return (
             <div className="h-full flex flex-col text-red-600 justify-center items-center gap-2">
                 <span className="text-2xl font-bold py-8">
                     پرداخت ناموفق
                 </span>
-                {!!error && (
-                    <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
-                        <div className="flex gap-2">
-                            <b>خطا:</b>
-                            <span dir="ltr">{error.error}</span>
-                        </div>
-                        <span>
-                            در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
-                        </span>
-                        <Button
-                            className="my-5"
-                            color="default"
-                            variant="shadow"
-                            size="lg"
-                            onPress={onBack2Bot}
-                        >
-                            بازگشت به ربات
-                        </Button>
+                <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
+                    <div className="flex gap-2">
+                        <b>شماره سفارش:</b>
+                        <span dir="ltr">{result.orderId}</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <b>شماره رهگیری:</b>
+                        <span dir="ltr">{result.refNumber}</span>
+                    </div>
+                    <span>
+                        در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
                     </span>
-                )}
-                {!!result && (
-                    <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
-                        <div className="flex gap-2">
-                            <b>شماره سفارش:</b>
-                            <span dir="ltr">{result.orderId}</span>
-                        </div>
-                        <div className="flex gap-2">
-                            <b>شماره رهگیری:</b>
-                            <span dir="ltr">{result.refNumber}</span>
-                        </div>
-                        <span>
-                            در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
-                        </span>
-                        <Button
-                            className="my-5"
-                            color="default"
-                            variant="shadow"
-                            size="lg"
-                            onPress={onBack2Bot}
-                        >
-                            بازگشت به ربات
-                        </Button>
+                    <Button
+                        className="my-5"
+                        color="default"
+                        variant="shadow"
+                        size="lg"
+                        onPress={onBack2Bot}
+                    >
+                        بازگشت به ربات
+                    </Button>
+                </span>
+            </div>
+        )
+    }
+
+    if (!result && !!error) {
+        return (
+            <div className="h-full flex flex-col text-red-600 justify-center items-center gap-2">
+                <span className="text-2xl font-bold py-8">
+                    مشکل در ثبت نام
+                </span>
+                <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
+                    <div className="flex gap-2">
+                        <b>خطا:</b>
+                        <span dir="ltr">{error.error}</span>
+                    </div>
+                    <span>
+                        در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
                     </span>
-                )}
+                    <Button
+                        className="my-5"
+                        color="default"
+                        variant="shadow"
+                        size="lg"
+                        onPress={onBack2Bot}
+                    >
+                        بازگشت به ربات
+                    </Button>
+                </span>
             </div>
         )
     }
