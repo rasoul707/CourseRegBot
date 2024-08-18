@@ -8,7 +8,7 @@ import {Spinner} from "@nextui-org/spinner";
 import {Image} from "@nextui-org/image";
 import {toast} from "@/lib/toast";
 import {Snippet} from "@nextui-org/snippet";
-import {Modal, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
+import {Modal, ModalBody, ModalContent, ModalFooter, useDisclosure} from "@nextui-org/modal";
 
 
 export default function Page({params}: { params: { id: string } }) {
@@ -116,8 +116,6 @@ export default function Page({params}: { params: { id: string } }) {
             setPaymentLoading(false)
         }
     }
-
-
 
 
     if (isLoading) {
@@ -243,20 +241,29 @@ export default function Page({params}: { params: { id: string } }) {
                     >
                         پرداخت
                     </Button>
-                    <Modal>
-                        <ModalBody>
-                            لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک کنید
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button
-                                variant="shadow"
-                                color="primary"
-                                onPress={onStartPayment}
-                                isLoading={isPaymentLoading}
-                            >
-                                پرداخت
-                            </Button>
-                        </ModalFooter>
+                    <Modal
+                        backdrop="blur"
+                        isOpen={prePaymentModal.isOpen}
+                        onClose={prePaymentModal.onClose}
+                        placement="bottom-center"
+                        scrollBehavior="inside"
+                        isDismissable
+                    >
+                        <ModalContent>
+                            <ModalBody>
+                                لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک کنید
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={onStartPayment}
+                                    isLoading={isPaymentLoading}
+                                >
+                                    پرداخت
+                                </Button>
+                            </ModalFooter>
+                        </ModalContent>
                     </Modal>
                 </>
             )}
