@@ -8,7 +8,7 @@ import {Spinner} from "@nextui-org/spinner";
 import {Image} from "@nextui-org/image";
 import {toast} from "@/lib/toast";
 import {Snippet} from "@nextui-org/snippet";
-import {Modal, ModalBody, ModalContent, ModalFooter, useDisclosure} from "@nextui-org/modal";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
 
 
 export default function Page({params}: { params: { id: string } }) {
@@ -250,6 +250,7 @@ export default function Page({params}: { params: { id: string } }) {
                         isDismissable
                     >
                         <ModalContent>
+                            <ModalHeader>پرداخت</ModalHeader>
                             <ModalBody>
                                 لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک کنید
                             </ModalBody>
