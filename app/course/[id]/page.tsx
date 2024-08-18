@@ -27,10 +27,9 @@ export default function Page({params}: { params: { id: string } }) {
             // @ts-ignore
             window.Telegram.WebApp.enableClosingConfirmation()
             await auth()
-            await getCourse()
-            await getLicense()
+            setLoading(false)
         }
-        setLoading(false)
+
     }
 
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -44,7 +43,6 @@ export default function Page({params}: { params: { id: string } }) {
         const ut = window.Telegram?.WebApp.initDataUnsafe
         const user = ut.user
         return new Promise(async (resolve, reject) => {
-            console.log("user")
             try {
                 const _data = {
                     id: user.id,
@@ -54,6 +52,7 @@ export default function Page({params}: { params: { id: string } }) {
                 }
                 const {data} = await axiosNoAuth.post(`/user`, _data)
                 setUser(data.user)
+                await getCourse()
                 resolve(data.user)
             } catch (e) {
                 setUser(null)
@@ -69,6 +68,7 @@ export default function Page({params}: { params: { id: string } }) {
             try {
                 const {data} = await axiosNoAuth.get(`/course/${courseId}`)
                 setCourse(data.course)
+                await getLicense()
                 resolve(data.course)
             } catch (e) {
                 setCourse(null)
