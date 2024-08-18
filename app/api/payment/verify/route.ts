@@ -36,9 +36,6 @@ export async function POST(request: NextRequest) {
         }
     )
 
-    let text = "test"
-    await sendMessage2User(payment.userId, text)
-
     if (!payment) {
         return NextResponse.json({ok: false, error: "سفارش پیدا نشد"}, {status: 404})
     }
@@ -60,9 +57,6 @@ export async function POST(request: NextRequest) {
     if (payment.success === false) {
         return failurePayment(payment.id)
     }
-
-    text = "`" + JSON.stringify(payment) + "`"
-    await sendMessage2User(payment.userId, text)
 
 
     // @ts-ignore
@@ -93,8 +87,6 @@ export async function POST(request: NextRequest) {
         return await failurePayment(payment.id)
     }
     if (+status === 1) {
-        text = "22222222"
-        await sendMessage2User(payment.userId, text)
         try {
             const ref_num = payment.refNumber
             const amount = payment.amount
@@ -135,13 +127,6 @@ export async function POST(request: NextRequest) {
             }
         } catch (e) {
             console.log("###VERIFYPAYMENT", 3)
-
-            text = "333333"
-            await sendMessage2User(payment.userId, text)
-
-            text = "`" + JSON.stringify(e) + "`"
-            await sendMessage2User(payment.userId, text)
-
             // @ts-ignore
             await prisma.Payment.update({
                 where: {

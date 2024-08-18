@@ -55,6 +55,7 @@ export default function Page() {
                 }
                 const {data} = await axiosNoAuth.post(`/payment/verify`, _data)
                 setResult(data)
+                setError(null)
                 resolve(data)
             } catch (e) {
                 setResult(null)
@@ -86,6 +87,9 @@ export default function Page() {
             </div>
         )
     }
+
+
+    console.log("################", result, error)
 
 
     if ((!result && error) || (result && !error)) {
