@@ -133,7 +133,7 @@ export default function Page({params}: { params: { id: string } }) {
             }
         } catch (e) {
             // @ts-ignore
-            toast.error(e?.data?.error || e)
+            // toast.error()
             setPaymentLoading(false)
         }
     }

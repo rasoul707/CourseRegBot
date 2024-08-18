@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
             "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
         }
         const {data} = await axios.post(process.env.PAYSTAR_CREATE_PAYMENT_BASE_URL!, body, {headers})
-        if (data.status === 1) {
+        if (+data.status === 1) {
             // @ts-ignore
             await prisma.Payment.update({
                 where: {
@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
         }
         return NextResponse.json({ok: false, error: "پاسخ مناسبی از درگاه دریافت نشد"}, {status: 401})
     } catch (e) {
+        console.log("###Payment", e)
         return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
     }
 }
