@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 const config = {
-    baseURL: `${process.env.NEXT_PUBLIC_CORE_BASE_URL || "https://classregbot.mentorader.ir/api"}`,
+    baseURL: process.env.NEXT_PUBLIC_CORE_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },

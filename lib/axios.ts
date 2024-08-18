@@ -4,7 +4,7 @@ import {toast} from "@/lib/toast";
 
 
 const config = {
-    baseURL: `${process.env.NEXT_PUBLIC_CORE_BASE_URL}`,
+    baseURL: process.env.NEXT_PUBLIC_CORE_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },

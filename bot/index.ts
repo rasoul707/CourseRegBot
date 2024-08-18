@@ -69,7 +69,7 @@ const showMainMenu = async (ctx: any) => {
         const keyboard = new InlineKeyboard()
 
         if (resultUser.user.isAdmin) {
-            keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin").row()
+            keyboard.webApp("پنل مدیریت", `${process.env.NEXT_PUBLIC_BASE_URL}admin`).row()
         }
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
     } else {
@@ -78,11 +78,11 @@ const showMainMenu = async (ctx: any) => {
 
         for (let i = 0; i < resultCourses.courses.length; i++) {
             const c = resultCourses.courses[i]
-            keyboard.webApp(c.title, `https://classregbot.mentorader.ir/course/${c.id}`).row()
+            keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
         }
 
         if (resultUser.user.isAdmin) {
-            keyboard.webApp("پنل مدیریت", "https://classregbot.mentorader.ir/admin").row()
+            keyboard.webApp("پنل مدیریت", `${process.env.NEXT_PUBLIC_BASE_URL}admin`).row()
         }
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
     }

@@ -85,8 +85,8 @@ export async function POST(request: NextRequest) {
     try {
         const amount = payment.amount
         const order_id = payment.id
-        const callback = process.env.NEXT_PUBLIC_PAYSTAR_CALLBACK + "payment"
-        const sign = sha512.hmac(process.env.NEXT_PUBLIC_PAYSTAR_KEY || "", `${amount}#${order_id}#${callback}`);
+        const callback = process.env.PAYSTAR_CALLBACK_BASE_URL + "/payment"
+        const sign = sha512.hmac(process.env.PAYSTAR_GATEWAY_KEY!, `${amount}#${order_id}#${callback}`);
         const callback_method = 1
         const body = {
             amount,
@@ -97,9 +97,9 @@ export async function POST(request: NextRequest) {
         }
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + process.env.NEXT_PUBLIC_PAYSTAR_API
+            "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
         }
-        const {data} = await axios.post("https://core.paystar.ir/api/pardakht/create", body, {headers})
+        const {data} = await axios.post(process.env.PAYSTAR_CREATE_PAYMENT_BASE_URL!, body, {headers})
         if (data.status === 1) {
             // @ts-ignore
             await prisma.Payment.update({
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
                     refNumber: data.data.ref_num
                 },
             });
-            return NextResponse.json({ok: true, url: "https://core.paystar.ir/api/pardakht/payment?token=" + data.data.token})
+            return NextResponse.json({ok: true, url: `${process.env.PAYSTAR_GATEWAY_PAYMENT_BASE_URL!}?token=${data.data.token}`})
         }
         return NextResponse.json({ok: false, error: "پاسخ مناسبی از درگاه دریافت نشد"}, {status: 401})
     } catch (e) {

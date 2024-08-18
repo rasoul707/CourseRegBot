@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         try {
             const ref_num = payment.refNumber
             const amount = payment.amount
-            const sign = sha512.hmac(process.env.NEXT_PUBLIC_PAYSTAR_KEY || "", `${amount}#${ref_num}#${cardNumber}#${trackingCode}`);
+            const sign = sha512.hmac(process.env.PAYSTAR_GATEWAY_KEY!, `${amount}#${ref_num}#${cardNumber}#${trackingCode}`);
             const body = {
                 ref_num,
                 amount,
@@ -92,9 +92,9 @@ export async function POST(request: NextRequest) {
             }
             const headers = {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + process.env.NEXT_PUBLIC_PAYSTAR_API
+                "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
             }
-            const {data} = await axios.post("https://core.paystar.ir/api/pardakht/verify", body, {headers})
+            const {data} = await axios.post(process.env.PAYSTAR_VERIFY_PAYMENT_BASE_URL!, body, {headers})
             if (data.status === 1) {
                 // @ts-ignore
                 await prisma.Payment.update({
@@ -155,10 +155,10 @@ const successPayment = async (id: number) => {
             watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]}
         }
         const headers = {
-            "$API": "ZJQMGL3oMXoBBeu9tYrV6U+qiQJO9w==",
+            "$API": process.env.SPOTPLAYER_LICENSE_API_KEY,
             "$LEVEL": -1
         }
-        const {data} = await axios.post("https://panel.spotplayer.ir/license/edit/", body, {headers})
+        const {data} = await axios.post(process.env.SPOTPLAYER_LICENSE_BASE_URL!, body, {headers})
         const token = data.key
 
         const _data = {

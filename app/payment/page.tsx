@@ -71,7 +71,7 @@ export default function Page() {
     }
     const onGenLicense = () => {
         const courseId = result.courseId
-        window.location.href = `https://classregbot.mentorader.ir/course/${courseId}`
+        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}course/${courseId}`
     }
 
     const [isLoading, setLoading] = useState<boolean>(true)
