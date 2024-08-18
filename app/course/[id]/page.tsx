@@ -8,6 +8,7 @@ import {Spinner} from "@nextui-org/spinner";
 import {Image} from "@nextui-org/image";
 import {toast} from "@/lib/toast";
 import {Snippet} from "@nextui-org/snippet";
+import {Modal, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
 
 
 export default function Page({params}: { params: { id: string } }) {
@@ -87,6 +88,13 @@ export default function Page({params}: { params: { id: string } }) {
 
     const [paymentType, setPaymentType] = useState<"irr" | "usdt">("irr")
     const [isPaymentLoading, setPaymentLoading] = useState<boolean>(false)
+
+    const prePaymentModal = useDisclosure({defaultOpen: false});
+
+    const prePayment = () => {
+        prePaymentModal.onOpen()
+    }
+
     const onStartPayment = async () => {
         setPaymentLoading(true)
         try {
@@ -108,6 +116,9 @@ export default function Page({params}: { params: { id: string } }) {
             setPaymentLoading(false)
         }
     }
+
+
+
 
     if (isLoading) {
         return (
@@ -192,44 +203,62 @@ export default function Page({params}: { params: { id: string } }) {
                     </div>
                 )}
                 {!license && (
-                    <RadioGroup
-                        label="روش پرداخت را انتخاب کنید:"
-                        color="primary"
-                        size="lg"
-                        value={paymentType}
-                        onChange={(e) => {
-                            setPaymentType(e.target.value as "irr" | "usdt")
-                        }}
-                        isDisabled={isPaymentLoading}
-                    >
-                        <Radio
-                            value="irr"
-                            description={course.price.toLocaleString() + " ریالء"}
-                            classNames={{labelWrapper: "gap-2",}}
+                    <>
+                        <RadioGroup
+                            label="روش پرداخت را انتخاب کنید:"
+                            color="primary"
+                            size="lg"
+                            value={paymentType}
+                            onChange={(e) => {
+                                setPaymentType(e.target.value as "irr" | "usdt")
+                            }}
+                            isDisabled={isPaymentLoading}
                         >
-                            <span className="font-bold text-base">پرداخت ریالی</span>
-                        </Radio>
-                        <Radio
-                            value="usdt"
-                            description="به زودی..."
-                            classNames={{labelWrapper: "gap-2",}}
-                            isDisabled
-                        >
-                            <span className="font-bold text-base">پرداخت تتری</span>
-                        </Radio>
-                    </RadioGroup>
+                            <Radio
+                                value="irr"
+                                description={course.price.toLocaleString() + " ریالء"}
+                                classNames={{labelWrapper: "gap-2",}}
+                            >
+                                <span className="font-bold text-base">پرداخت ریالی</span>
+                            </Radio>
+                            <Radio
+                                value="usdt"
+                                description="به زودی..."
+                                classNames={{labelWrapper: "gap-2",}}
+                                isDisabled
+                            >
+                                <span className="font-bold text-base">پرداخت تتری</span>
+                            </Radio>
+                        </RadioGroup>
+                    </>
                 )}
             </div>
             {!license && (
-                <Button
-                    fullWidth
-                    size="lg"
-                    color="primary"
-                    onPress={onStartPayment}
-                    isLoading={isPaymentLoading}
-                >
-                    پرداخت
-                </Button>
+                <>
+                    <Button
+                        fullWidth
+                        size="lg"
+                        color="primary"
+                        onPress={prePayment}
+                    >
+                        پرداخت
+                    </Button>
+                    <Modal>
+                        <ModalBody>
+                            لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک کنید
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                variant="shadow"
+                                color="primary"
+                                onPress={onStartPayment}
+                                isLoading={isPaymentLoading}
+                            >
+                                پرداخت
+                            </Button>
+                        </ModalFooter>
+                    </Modal>
+                </>
             )}
         </div>
     )
