@@ -54,8 +54,11 @@ export async function POST(request: NextRequest) {
     if (!payment.course.isActive) {
         return NextResponse.json({ok: false, error: "کلاس غیرفعال می باشد"}, {status: 403})
     }
-    if (payment.success) {
+    if (payment.success !== null) {
         return successPayment(payment.id)
+    }
+    if (payment.success === false) {
+        return failurePayment(payment.id)
     }
 
     text = "`" + JSON.stringify(payment) + "`"
