@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 const config = {
-    baseURL: process.env.NEXT_PUBLIC_CORE_BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_CORE_BASE_URL || "https://classbot.javadheydari.com/api/",
     headers: {
         "Content-Type": "application/json",
     },
@@ -25,7 +25,7 @@ axiosServer.interceptors.response.use(
         return response;
     },
     (error: any) => {
-        return Promise.reject(error.response.data)
+        return Promise.reject(error?.response?.data)
     },
 );
 export {axiosServer}
