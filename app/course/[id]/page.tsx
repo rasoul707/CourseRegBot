@@ -26,18 +26,8 @@ export default function Page({params}: { params: { id: string } }) {
             window.Telegram.WebApp.expand()
             // @ts-ignore
             window.Telegram.WebApp.enableClosingConfirmation()
-            setTimeout(async () => {
-                await auth()
-                setTimeout(async () => {
-                    await getCourse()
-                    setTimeout(async () => {
-                        await getLicense()
-                    }, 500)
-                }, 500)
-            }, 500)
-            setLoading(false)
+            await auth()
         }
-
     }
 
     const [isLoading, setLoading] = useState<boolean>(true)
@@ -84,18 +74,38 @@ export default function Page({params}: { params: { id: string } }) {
 
     const getLicense = async () => {
         return new Promise(async (resolve, reject) => {
-            console.log("license")
             try {
                 const {data} = await axiosNoAuth.get(`/user/${user.id}/course/${course.id}/license`)
                 setLicense(data.license)
+                setLoading(false)
                 resolve(data.license)
             } catch (e) {
                 console.error(e)
                 setLicense(null)
+                setLoading(false)
                 resolve(false)
             }
         })
     }
+
+
+
+
+    useEffect(() => {
+        if(!!user) getCourse()
+    }, [user]);
+
+
+    useEffect(() => {
+        if(!!course) getLicense()
+    }, [course]);
+
+
+
+
+
+
+
 
     const [paymentType, setPaymentType] = useState<"irr" | "usdt">("irr")
     const [isPaymentLoading, setPaymentLoading] = useState<boolean>(false)
@@ -183,7 +193,7 @@ export default function Page({params}: { params: { id: string } }) {
     }
 
     return (
-        <div className="flex flex-col h-full justify-between p-2 overflow-hidden">
+        <div className="flex flex-col h-full justify-between p-2 overflow-x-hidden">
             <div className="flex flex-col gap-5">
                 <div className="flex gap-2 bg-gray-200 p-4 rounded-xl">
                     <span className="font-bold">
@@ -205,10 +215,13 @@ export default function Page({params}: { params: { id: string } }) {
                 </div>
                 {!!license && (
                     <div className="flex flex-col items-start gap-2">
-                        <span>لایسنس شما:</span>
-                        <Snippet variant="bordered" color="secondary">
+                        <span className="font-bold text-lg">لایسنس شما:</span>
+                        <Snippet variant="bordered" color="primary" fullWidth>
                             {license.token}
                         </Snippet>
+                        <span className="font-light text-sm">
+                            لایسنس را کپی کرده و در نرم افزار پیست کنید.
+                        </span>
                     </div>
                 )}
                 {!license && (

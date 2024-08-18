@@ -11,7 +11,7 @@ export async function GET(request: NextRequest, {params}: { params: { id: string
     const courseId = params.courseId
 
     // @ts-ignore
-    const license = await prisma.Licesnse.has({
+    const license = await prisma.Licesnse.findFirst({
         where: {
             userId: +userId,
             courseId: +courseId
