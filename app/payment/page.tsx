@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {Spinner} from "@nextui-org/spinner";
 import {axiosNoAuth} from "@/lib/axios";
@@ -38,7 +38,11 @@ export default function Page() {
 
     const [result, setResult] = useState<any>(null)
     const [error, setError] = useState<any>(null)
+
+    const isFirst = useRef(true)
     const verifyPayment = async () => {
+        if(!isFirst.current) return
+        isFirst.current = false
         return new Promise(async (resolve, reject) => {
             try {
                 const _data = {
