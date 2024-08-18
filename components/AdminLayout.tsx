@@ -62,42 +62,42 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
             </div>
         )
     }
-    if (!user) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    احراز هویت موفقیت آمیز نبود :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.isActive) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شما مجاز به ثبت نام نیستید :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.phoneNumber) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شماره موبایل خود را ثبت نکرده اید :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.isAdmin) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شما دسترسی به این صفحه ندارید :/
-                </span>
-            </div>
-        )
-    }
+    // if (!user) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 احراز هویت موفقیت آمیز نبود :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.isActive) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شما مجاز به ثبت نام نیستید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.phoneNumber) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شماره موبایل خود را ثبت نکرده اید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.isAdmin) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شما دسترسی به این صفحه ندارید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
     return (
         <main className="container mx-auto max-w-7xl flex-grow">
             <section className="flex flex-col justify-center gap-4">
@@ -140,7 +140,9 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
                         </NavbarItem>
                     </NavbarContent>
                 </Navbar>
-                {children}
+                <div className="px-4">
+                    {children}
+                </div>
             </section>
         </main>
     )

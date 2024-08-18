@@ -282,6 +282,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                 isDismissable
             >
                 <ModalContent>
+
                     {(!!id && !course || !id && !!course)
                         ?
                         (
@@ -291,58 +292,60 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                         )
                         :
                         (
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <>
                                 <ModalHeader>
                                     {course ? "ویرایش کلاس" : "افزودن کلاس جدید"}
                                 </ModalHeader>
                                 <ModalBody>
-                                    <Input
-                                        label="عنوان"
-                                        {...titleField}
-                                        isDisabled={isSubmitSuccessful}
-                                        isReadOnly={isSubmitting}
-                                        isInvalid={!!errors.title}
-                                        errorMessage={errors.title?.message}
-                                    />
-                                    <Input
-                                        label="آدرس بنر"
-                                        dir="ltr"
-                                        {...imageField}
-                                        isDisabled={isSubmitSuccessful}
-                                        isReadOnly={isSubmitting}
-                                        isInvalid={!!errors.image}
-                                        errorMessage={errors.image?.message}
-                                    />
+                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                                        <Input
+                                            label="عنوان"
+                                            {...titleField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.title}
+                                            errorMessage={errors.title?.message}
+                                        />
+                                        <Input
+                                            label="آدرس بنر"
+                                            dir="ltr"
+                                            {...imageField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.image}
+                                            errorMessage={errors.image?.message}
+                                        />
 
-                                    <Input
-                                        label="هزینه ثبت نام"
-                                        dir="ltr"
-                                        type="tel"
-                                        {...priceField}
-                                        isDisabled={isSubmitSuccessful}
-                                        isReadOnly={isSubmitting}
-                                        isInvalid={!!errors.price}
-                                        errorMessage={errors.price?.message}
-                                        description="به ریال وارد شود"
-                                    />
-                                    <Input
-                                        label="شناسه ارجاع"
-                                        dir="ltr"
-                                        {...uuidField}
-                                        isDisabled={isSubmitSuccessful}
-                                        isReadOnly={isSubmitting}
-                                        isInvalid={!!errors.uuid}
-                                        errorMessage={errors.uuid?.message}
-                                        description="شناسه ارجاع در اپلیکیشن مربوط وارد شود"
-                                    />
-                                    <Checkbox
-                                        {...isActiveField}
-                                        isDisabled={isSubmitSuccessful}
-                                        isReadOnly={isSubmitting}
-                                        isInvalid={!!errors.isActive}
-                                    >
-                                        فعال
-                                    </Checkbox>
+                                        <Input
+                                            label="هزینه ثبت نام"
+                                            dir="ltr"
+                                            type="tel"
+                                            {...priceField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.price}
+                                            errorMessage={errors.price?.message}
+                                            description="به ریال وارد شود"
+                                        />
+                                        <Input
+                                            label="شناسه ارجاع"
+                                            dir="ltr"
+                                            {...uuidField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.uuid}
+                                            errorMessage={errors.uuid?.message}
+                                            description="شناسه ارجاع در اپلیکیشن مربوط وارد شود"
+                                        />
+                                        <Checkbox
+                                            {...isActiveField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.isActive}
+                                        >
+                                            فعال
+                                        </Checkbox>
+                                    </form>
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button
@@ -357,13 +360,14 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                                         variant="shadow"
                                         color="primary"
                                         type="submit"
+                                        onPress={() => handleSubmit(onSubmit)()}
                                         isDisabled={isSubmitSuccessful}
                                         isLoading={isSubmitting}
                                     >
                                         اعمال
                                     </Button>
                                 </ModalFooter>
-                            </form>
+                            </>
                         )
                     }
                 </ModalContent>
