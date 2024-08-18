@@ -4,7 +4,8 @@ import prisma from "@/lib/prisma";
 import {axiosServer} from "@/lib/axiosServer";
 import axios from "axios";
 import {sha512} from "js-sha512";
-import {sendMessage2User} from "@/bot";
+import {sendMessage2User} from "@/lib/tlgbot";
+
 
 // create payment
 export async function POST(request: NextRequest) {
@@ -202,7 +203,11 @@ const successPayment = async (id: number) => {
 const failurePayment = async (id: number) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
-        where: {id: id}
+        where: {id: id},
+        include: {
+            user: true,
+            course: true,
+        }
     })
 
     let text = "❌ ثبت نام شما در کلاس *" + p.course.title + "* با خطا مواجه شد"
