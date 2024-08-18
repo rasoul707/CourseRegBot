@@ -99,8 +99,8 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
         )
     }
     return (
-        <main className="container mx-auto max-w-7xl flex-grow">
-            <section className="flex flex-col justify-center gap-4">
+        <main className="container mx-auto max-w-7xl flex-grow overflow-x-hidden">
+            <section className="flex flex-col justify-center">
                 <Navbar
                     classNames={{
                         item: [
@@ -140,7 +140,7 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
                         </NavbarItem>
                     </NavbarContent>
                 </Navbar>
-                <div className="px-4">
+                <div className="p-4">
                     {children}
                 </div>
             </section>

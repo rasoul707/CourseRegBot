@@ -80,6 +80,7 @@ export default function Page({params}: { params: { id: string } }) {
                 setLicense(data.license)
                 resolve(data.license)
             } catch (e) {
+                console.error(e)
                 setLicense(null)
                 resolve(false)
             }
