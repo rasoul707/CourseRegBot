@@ -149,6 +149,9 @@ const successPayment = async (id: number) => {
         }
     })
 
+    let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
+    await sendMessage2User(p.userId, text)
+
 
     try {
         const body = {
@@ -174,14 +177,18 @@ const successPayment = async (id: number) => {
             {data: _data}
         )
 
-        let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
-        text += "\n\n"
-        text += "*لایسنس شما:*"
+        let text = "*لایسنس شما:*"
         text += "\n"
         text += "```" + (license?.token || "-") + "```"
         await sendMessage2User(p.userId, text)
 
     } catch (e) {
+
+        let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
+        text += "\n"
+        text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
+        await sendMessage2User(p.userId, text)
+
         // @ts-ignore
         return NextResponse.json({
             ok: true,
