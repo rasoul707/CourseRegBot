@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     });
 
 
-    if(status !== 1) {
+    if(+status !== 1) {
         // @ts-ignore
         await prisma.Payment.update({
             where: {
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         });
         return await failurePayment(payment.id)
     }
-    if(status === 1) {
+    if(+status === 1) {
         try {
             const ref_num = payment.refNumber
             const amount = payment.amount
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
                 "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
             }
             const {data} = await axios.post(process.env.PAYSTAR_VERIFY_PAYMENT_BASE_URL!, body, {headers})
-            if (data.status === 1) {
+            if (+data.status === 1) {
                 // @ts-ignore
                 await prisma.Payment.update({
                     where: {

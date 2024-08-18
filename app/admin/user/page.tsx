@@ -351,7 +351,7 @@ const PaymentsTool = ({id}: { id: number }) => {
                             <span className="font-bold">
                                 شناسه رهگیری تراکنش:
                             </span>
-                            <span className="select-all">
+                            <span className="select-all" dir="ltr">
                                 {c.refNumber || "-"}
                             </span>
                         </div>
@@ -359,7 +359,7 @@ const PaymentsTool = ({id}: { id: number }) => {
                             <span className="font-bold">
                                 شناسه تراکنش:
                             </span>
-                            <span>
+                            <span className="select-all" dir="ltr">
                                 {c.transactionId || "-"}
                             </span>
                         </div>
@@ -367,7 +367,7 @@ const PaymentsTool = ({id}: { id: number }) => {
                             <span className="font-bold">
                                 شماره کارت:
                             </span>
-                            <span>
+                            <span className="select-all" dir="ltr">
                                 {c.cardNumber || "-"}
                             </span>
                         </div>
@@ -375,7 +375,7 @@ const PaymentsTool = ({id}: { id: number }) => {
                             <span className="font-bold">
                                 کد رهگیری بانکی:
                             </span>
-                            <span>
+                            <span className="select-all" dir="ltr">
                                 {c.trackingCode || "-"}
                             </span>
                         </div>

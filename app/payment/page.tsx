@@ -69,7 +69,7 @@ export default function Page() {
             toast.info("لطفا مینی اپ را ببندید")
         }
     }
-    const onGenLicense = () => {
+    const go2Course = () => {
         const courseId = result.courseId
         window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}course/${courseId}`
     }
@@ -94,8 +94,11 @@ export default function Page() {
                     <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                         <div className="flex gap-2">
                             <b>خطا:</b>
-                            <span>{error.error}</span>
+                            <span dir="ltr">{error.error}</span>
                         </div>
+                        <span>
+                            در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
+                        </span>
                         <Button
                             className="my-5"
                             color="default"
@@ -111,12 +114,15 @@ export default function Page() {
                     <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                         <div className="flex gap-2">
                             <b>شماره سفارش:</b>
-                            <span>{result.orderId}</span>
+                            <span dir="ltr">{result.orderId}</span>
                         </div>
                         <div className="flex gap-2">
                             <b>شماره رهگیری:</b>
-                            <span>{result.refNumber}</span>
+                            <span dir="ltr">{result.refNumber}</span>
                         </div>
+                        <span>
+                            در صورت کسر از حساب، مبلغ تا حداکثر 72 ساعت به حسابتان برگردانده می شود.
+                        </span>
                         <Button
                             className="my-5"
                             color="default"
@@ -141,15 +147,15 @@ export default function Page() {
             <span className="text-sm font-light flex flex-col justify-center items-center gap-2">
                 <div className="flex gap-2">
                     <b>شماره سفارش:</b>
-                    <span>{result?.orderId || "-"}</span>
+                    <span dir="ltr">{result?.orderId || "-"}</span>
                 </div>
                 <div className="flex gap-2">
                     <b>شماره رهگیری:</b>
-                    <span>{result?.refNumber || "-"}</span>
+                    <span dir="ltr">{result?.refNumber || "-"}</span>
                 </div>
                 <div className="flex gap-2">
                     <b>کد رهگیری بانکی:</b>
-                    <span>{result?.trackingCode || "-"}</span>
+                    <span dir="ltr">{result?.trackingCode || "-"}</span>
                 </div>
                 {result.error && (
                     <>
@@ -171,7 +177,7 @@ export default function Page() {
                         color="primary"
                         variant="shadow"
                         size="lg"
-                        onPress={onGenLicense}
+                        onPress={go2Course}
                     >
                         دریافت اطلاعات کلاس
                     </Button>
