@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     try {
         const amount = payment.amount
         const order_id = payment.id
-        const callback = process.env.PAYSTAR_CALLBACK_BASE_URL + "/payment"
+        const callback = process.env.PAYSTAR_CALLBACK_BASE_URL + "payment"
         const sign = sha512.hmac(process.env.PAYSTAR_GATEWAY_KEY!, `${amount}#${order_id}#${callback}`);
         const callback_method = 1
         const body = {
