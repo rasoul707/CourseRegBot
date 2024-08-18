@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
 
 
     if (+status !== 1) {
+        console.log("###VERIFYPAYMENT", 1)
         // @ts-ignore
         await prisma.Payment.update({
             where: {
@@ -109,6 +110,7 @@ export async function POST(request: NextRequest) {
                 });
                 return successPayment(payment.id)
             } else {
+                console.log("###VERIFYPAYMENT", 2)
                 // @ts-ignore
                 await prisma.Payment.update({
                     where: {
@@ -121,6 +123,7 @@ export async function POST(request: NextRequest) {
                 return await failurePayment(payment.id)
             }
         } catch (e) {
+            console.log("###VERIFYPAYMENT", 3, e)
             // @ts-ignore
             await prisma.Payment.update({
                 where: {
