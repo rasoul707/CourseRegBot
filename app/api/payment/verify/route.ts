@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         return successPayment(payment.id)
     }
 
-    text = "```" + JSON.stringify(payment) + "```"
+    text = "`" + JSON.stringify(payment) + "`"
     await sendMessage2User(payment.userId, text)
 
 
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
             text = "333333"
             await sendMessage2User(payment.userId, text)
 
-            text = "```" + JSON.stringify(e) + "```"
+            text = "`" + JSON.stringify(e) + "`"
             await sendMessage2User(payment.userId, text)
 
             // @ts-ignore
@@ -194,7 +194,7 @@ const successPayment = async (id: number) => {
 
         let text = "*لایسنس شما:*"
         text += "\n"
-        text += "```" + (license?.token || "-") + "```"
+        text += "```" + "License\n" + (license?.token || "-") + "```"
         await sendMessage2User(p.userId, text)
 
     } catch (e) {
