@@ -33,11 +33,18 @@ export default function Page({params}: { params: { id: string } }) {
         setLoading(false)
     }
 
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [course, setCourse] = useState<any>(null)
+    const [user, setUser] = useState<any>(null)
+    const [license, setLicense] = useState<any>(null)
+
+
     const auth = async () => {
         // @ts-ignore
         const ut = window.Telegram?.WebApp.initDataUnsafe
         const user = ut.user
         return new Promise(async (resolve, reject) => {
+            console.log("user")
             try {
                 const _data = {
                     id: user.id,
@@ -55,13 +62,10 @@ export default function Page({params}: { params: { id: string } }) {
         })
     }
 
-    const [isLoading, setLoading] = useState<boolean>(true)
-    const [course, setCourse] = useState<any>(null)
-    const [user, setUser] = useState<any>(null)
-    const [license, setLicense] = useState<any>(null)
 
     const getCourse = async () => {
         return new Promise(async (resolve, reject) => {
+            console.log("course")
             try {
                 const {data} = await axiosNoAuth.get(`/course/${courseId}`)
                 setCourse(data.course)
@@ -75,6 +79,7 @@ export default function Page({params}: { params: { id: string } }) {
 
     const getLicense = async () => {
         return new Promise(async (resolve, reject) => {
+            console.log("license")
             try {
                 const {data} = await axiosNoAuth.get(`/user/${user.id}/course/${course.id}/license`)
                 setLicense(data.license)
