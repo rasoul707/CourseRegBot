@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import {axiosServer} from "@/lib/axiosServer";
 import axios from "axios";
 import {sha512} from "js-sha512";
+import {sendMessage2User} from "@/bot";
 
 // create payment
 export async function POST(request: NextRequest) {
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
     });
 
 
-    if(+status !== 1) {
+    if (+status !== 1) {
         // @ts-ignore
         await prisma.Payment.update({
             where: {
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
         });
         return await failurePayment(payment.id)
     }
-    if(+status === 1) {
+    if (+status === 1) {
         try {
             const ref_num = payment.refNumber
             const amount = payment.amount
@@ -134,9 +135,6 @@ export async function POST(request: NextRequest) {
 }
 
 
-
-
-
 const successPayment = async (id: number) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
@@ -168,24 +166,47 @@ const successPayment = async (id: number) => {
         }
 
         // @ts-ignore
-        await prisma.License.create(
+        const license = await prisma.License.create(
             {data: _data}
         )
 
+        let text = "✅ ثبت نام شما در کلاس *" + p.course.title + "* با موفقیت انجام شد"
+        text += "\n\n"
+        text += "*لایسنس شما:*"
+        text += "\n"
+        text += "```" + (license?.token || "-") + "```"
+        await sendMessage2User(p.userId, text)
+
     } catch (e) {
         // @ts-ignore
-        return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode, courseId: p.courseId, error: "خطایی در تولید لایسنس رخ داد. با مدیریت هماهنگ کنید."})
+        return NextResponse.json({
+            ok: true,
+            orderId: p.id,
+            refNumber: p.refNumber,
+            trackingCode: p.trackingCode,
+            courseId: p.courseId,
+            error: "خطایی در تولید لایسنس رخ داد. با مدیریت هماهنگ کنید."
+        })
     }
 
-    return NextResponse.json({ok: true, orderId: p.id, refNumber: p.refNumber, trackingCode: p.trackingCode, courseId: p.courseId})
+    return NextResponse.json({
+        ok: true,
+        orderId: p.id,
+        refNumber: p.refNumber,
+        trackingCode: p.trackingCode,
+        courseId: p.courseId
+    })
 }
 
 
-
-const failurePayment = async(id: number) => {
+const failurePayment = async (id: number) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
         where: {id: id}
     })
+
+    let text = "❌ ثبت نام شما در کلاس *" + p.course.title + "* با خطا مواجه شد"
+    await sendMessage2User(p.userId, text)
+
     return NextResponse.json({ok: false, orderId: p.id, refNumber: p.refNumber})
 }

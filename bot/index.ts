@@ -130,3 +130,10 @@ const userInactive = async (ctx: any) => {
 
 
 
+
+
+export const sendMessage2User = async (chat_id: number, text: string) => {
+    await bot.api.sendMessage(chat_id, text)
+}
+
+
