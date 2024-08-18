@@ -174,7 +174,7 @@ const successPayment = async (id: number) => {
             {data: _data}
         )
 
-        let text = "✅ ثبت نام شما در کلاس *" + p.course.title + "* با موفقیت انجام شد"
+        let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
         text += "\n\n"
         text += "*لایسنس شما:*"
         text += "\n"
@@ -213,7 +213,7 @@ const failurePayment = async (id: number) => {
         }
     })
 
-    let text = "❌ ثبت نام شما در کلاس *" + p.course.title + "* با خطا مواجه شد"
+    let text = "❌ ثبت نام شما در *" + p.course.title + "* با خطا مواجه شد"
     await sendMessage2User(p.userId, text)
 
     return NextResponse.json({ok: false, orderId: p.id, refNumber: p.refNumber})
