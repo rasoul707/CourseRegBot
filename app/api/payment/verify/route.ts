@@ -176,8 +176,9 @@ TransactionId: \`${p.transactionId}\`
     try {
         const body = {
             course: [p.course.uuid],
-            name: `${p.user.firstName} ${p.user.lastName}`,
-            watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]}
+            name: `${p.user.firstName}${p.user.lastName ? " " + p.user.lastName : ""} - ${"0" + p.user.phoneNumber?.substring(3)}`,
+            watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]},
+            payload: `OrderId_${p.id}_TgId_${p.user.id}`,
         }
         const headers = {
             "$API": process.env.SPOTPLAYER_LICENSE_API_KEY,
