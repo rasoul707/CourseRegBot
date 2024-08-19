@@ -55,53 +55,54 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
     const [user, setUser] = useState<any>(null)
 
 
-    if (isLoading) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <Spinner size="lg"/>
-            </div>
-        )
-    }
-    if (!user) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    احراز هویت موفقیت آمیز نبود :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.isActive) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شما مجاز به ثبت نام نیستید :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.phoneNumber) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شماره موبایل خود را ثبت نکرده اید :/
-                </span>
-            </div>
-        )
-    }
-    if (!user?.isAdmin) {
-        return (
-            <div className="h-full flex justify-center items-center">
-                <span className="text-lg text-red-600 font-bold">
-                    شما دسترسی به این صفحه ندارید :/
-                </span>
-            </div>
-        )
-    }
+    // if (isLoading) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <Spinner size="lg"/>
+    //         </div>
+    //     )
+    // }
+    // if (!user) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 احراز هویت موفقیت آمیز نبود :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.isActive) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شما مجاز به ثبت نام نیستید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.phoneNumber) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شماره موبایل خود را ثبت نکرده اید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
+    // if (!user?.isAdmin) {
+    //     return (
+    //         <div className="h-full flex justify-center items-center">
+    //             <span className="text-lg text-red-600 font-bold">
+    //                 شما دسترسی به این صفحه ندارید :/
+    //             </span>
+    //         </div>
+    //     )
+    // }
     return (
         <main className="container mx-auto max-w-7xl flex-grow overflow-x-hidden">
             <section className="flex flex-col justify-center">
                 <Navbar
+                    className=""
                     classNames={{
                         item: [
                             "flex",
@@ -120,22 +121,28 @@ export default function AdminLayout({children}: { children: React.ReactNode; }) 
                             "data-[active=true]:after:rounded-[2px]",
                             "data-[active=true]:after:bg-primary",
                         ],
+                        wrapper: "justify-center"
                     }}
                 >
-                    <NavbarContent className="flex gap-6 w-full" justify="center">
-                        <NavbarItem isActive={pathname === "/admin"}>
+                    <NavbarContent className="flex gap-6 w-fit overflow-y-hidden !flex-[auto_0]" justify="start">
+                        <NavbarItem isActive={pathname === "/admin"} className="shrink-0">
                             <Link color={pathname === "/admin" ? "primary" : "foreground"} href="/admin">
                                 داشبورد
                             </Link>
                         </NavbarItem>
-                        <NavbarItem isActive={pathname === "/admin/course"}>
+                        <NavbarItem isActive={pathname === "/admin/course"} className="shrink-0">
                             <Link color={pathname === "/admin/course" ? "primary" : "foreground"} href="/admin/course">
                                 کلاس ها
                             </Link>
                         </NavbarItem>
-                        <NavbarItem isActive={pathname === "/admin/user"}>
+                        <NavbarItem isActive={pathname === "/admin/user"} className="shrink-0">
                             <Link color={pathname === "/admin/user" ? "primary" : "foreground"} href="/admin/user">
                                 کاربران
+                            </Link>
+                        </NavbarItem>
+                        <NavbarItem isActive={pathname === "/admin/setting"} className="shrink-0">
+                            <Link color={pathname === "/admin/setting" ? "primary" : "foreground"} href="/admin/setting">
+                                تنظیمات
                             </Link>
                         </NavbarItem>
                     </NavbarContent>
