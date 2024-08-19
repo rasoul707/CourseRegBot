@@ -1,6 +1,7 @@
 import {Bot, GrammyError, HttpError, InlineKeyboard, Keyboard} from "grammy";
 import * as dotenv from "dotenv"
 import {axiosServer} from "../lib/axiosServer";
+import prisma from "../lib/prisma";
 
 dotenv.config();
 
@@ -68,9 +69,17 @@ const showMainMenu = async (ctx: any) => {
         const text = "هنوز هیچ کلاسی پیدا نشد، مجددا بعدا تلاش کنید"
         const keyboard = new InlineKeyboard()
 
+        // @ts-ignore
+        const s = await prisma.Setting.findUnique({
+            where: {id: 1},
+        })
+        if(s?.supportUsername) keyboard.url("پشتیبانی" , "https://t.me/" + s.supportUsername).row()
+
+
         if (resultUser.user.isAdmin) {
             keyboard.webApp("پنل مدیریت", `${process.env.NEXT_PUBLIC_BASE_URL}admin`).row()
         }
+
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
     } else {
         const text = "کلاس را انتخاب کنید:"
@@ -81,9 +90,16 @@ const showMainMenu = async (ctx: any) => {
             keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
         }
 
+        // @ts-ignore
+        const s = await prisma.Setting.findUnique({
+            where: {id: 1},
+        })
+        if(s?.supportUsername) keyboard.url("پشتیبانی" , "https://t.me/" + s.supportUsername).row()
+
         if (resultUser.user.isAdmin) {
             keyboard.webApp("پنل مدیریت", `${process.env.NEXT_PUBLIC_BASE_URL}admin`).row()
         }
+
         return await ctx.api.sendMessage(ctx.chat.id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
     }
 
