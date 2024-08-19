@@ -9,11 +9,12 @@ import {Input} from "@nextui-org/input";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "@/lib/toast";
 import {z} from "zod";
+import {Spinner} from "@nextui-org/spinner";
 
 
 export default function Page() {
     const [isDataLoading, setDataLoading] = React.useState(true);
-    const [data, setData] = useState<any>({})
+    const [data, setData] = useState<any>(null)
     const getData = async () => {
         try {
             const {data} = await axiosNoAuth.get("setting")
@@ -66,7 +67,7 @@ export default function Page() {
     const validate = (_data: SettingFormType) => {
         const shape = {
             supportUsername: z.string().min(4, "یوزرنیم پشتبان معتبر نیست"),
-            adminChannelId: z.string().regex(/^\d+$/, "آیدی چنل ادمین معتبر نیست").transform(Number),
+            adminChannelId: z.string().regex(/^-\d+$/, "آیدی چنل ادمین معتبر نیست"),
         }
         const {success, data, error} = z.object(shape).safeParse(_data);
         if (!success) {
@@ -99,29 +100,36 @@ export default function Page() {
                     <h5 className="font-bold text-lg">تنظیمات</h5>
                 </CardHeader>
                 <CardBody className="text-start">
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
-                        <Input
-                            label="یوزرنیم پشتیبانی"
-                            dir="ltr"
-                            {...supportUsernameField}
-                            isDisabled={isSubmitSuccessful}
-                            isReadOnly={isSubmitting || isDataLoading}
-                            isInvalid={!!errors.supportUsername}
-                            errorMessage={errors.supportUsername?.message}
-                            description="بدون @ وارد شود: admin_shop"
-                        />
-                        <Input
-                            label="شناسه کانال مدیریت"
-                            dir="ltr"
-                            type="tel"
-                            {...adminChannelIdField}
-                            isDisabled={isSubmitSuccessful}
-                            isReadOnly={isSubmitting || isDataLoading}
-                            isInvalid={!!errors.adminChannelId}
-                            errorMessage={errors.adminChannelId?.message}
-                            description="شناسه عددی کانال: 14514523655"
-                        />
-                    </form>
+                    {isDataLoading && (
+                        <div className="flex justify-center items-center py-8">
+                            <Spinner/>
+                        </div>
+                    )}
+                    {!isDataLoading && (
+                        <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
+                            <Input
+                                label="یوزرنیم پشتیبانی"
+                                dir="ltr"
+                                {...supportUsernameField}
+                                // isDisabled={isSubmitSuccessful}
+                                isReadOnly={isSubmitting || isDataLoading}
+                                isInvalid={!!errors.supportUsername}
+                                errorMessage={errors.supportUsername?.message}
+                                description="بدون @ وارد شود: admin_shop"
+                            />
+                            <Input
+                                label="شناسه کانال مدیریت"
+                                dir="ltr"
+                                type="tel"
+                                {...adminChannelIdField}
+                                // isDisabled={isSubmitSuccessful}
+                                isReadOnly={isSubmitting || isDataLoading}
+                                isInvalid={!!errors.adminChannelId}
+                                errorMessage={errors.adminChannelId?.message}
+                                description="شناسه عددی کانال: 14514523655"
+                            />
+                        </form>
+                    )}
                 </CardBody>
                 <CardFooter>
                     <Button
@@ -129,7 +137,7 @@ export default function Page() {
                         color="primary"
                         type="submit"
                         onPress={() => handleSubmit(onSubmit)()}
-                        isDisabled={isSubmitSuccessful || isDataLoading}
+                        // isDisabled={isSubmitSuccessful}
                         isLoading={isSubmitting}
                     >
                         اعمال
