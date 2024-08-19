@@ -56,5 +56,5 @@ model Licesnse {
 model Setting {
   id              Int @id @default(autoincrement())
   supportUsername String
-  adminChannelId  Int
+  adminChannelId  String
 }

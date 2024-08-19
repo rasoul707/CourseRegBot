@@ -33,7 +33,7 @@ export const sendNotify2AdminChanel = async (text: string) => {
     })
 
     if(s.adminChannelId) {
-        const m = await bot.api.sendMessage(s.adminChannelId, text, {parse_mode: "MarkdownV2"})
+        const m = await bot.api.sendMessage(+s.adminChannelId, text, {parse_mode: "MarkdownV2"})
         return m.message_id
     }
 }
