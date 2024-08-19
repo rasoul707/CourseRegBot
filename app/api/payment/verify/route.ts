@@ -208,13 +208,15 @@ TransactionId: \`${p.transactionId}\`
         }
     } catch (e: any) {
 
+        console.log(e, "SPOTPLAYER ERROR")
+
         if (sendNotif) {
             let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
             text += "\n"
             text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
             await sendMessage2User(p.userId, text, true)
 
-            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌\n\nخطا: ${e.ex.msg}`, msgPaymentAdmin)
+            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌\n\nخطا: ${e?.ex?.msg || JSON.stringify(e) || "-"}`, msgPaymentAdmin)
         }
 
         // @ts-ignore
