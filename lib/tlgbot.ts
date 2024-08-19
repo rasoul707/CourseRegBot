@@ -1,4 +1,5 @@
 import {Bot, InlineKeyboard} from "grammy";
+import prisma from "@/lib/prisma";
 
 export const sendMessage2User = async (chat_id: number, text: string, withSupportButton: boolean = false) => {
     const token = process.env.TELEGRAM_BOT_TOKEN;
