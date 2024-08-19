@@ -219,7 +219,7 @@ TransactionId: \`${p.transactionId}\`
             text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
             await sendMessage2User(p.userId, text, true)
 
-            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌\n\nخطا: ${e?.response?.data?.ex?.msg || "نا مشخص"}`, msgPaymentAdmin)
+            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌\n\nخطا: ${(e?.response?.data?.ex?.msg || "نا مشخص").replace(/_|[*`~>#+=|{}()\\.!-]/g, "\\$&")}`, msgPaymentAdmin)
         }
 
         // @ts-ignore
