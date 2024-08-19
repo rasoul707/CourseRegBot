@@ -15,6 +15,7 @@ export const sendMessage2User = async (chat_id: number, text: string, withSuppor
         if (s?.supportUsername) {
             keyboard.url("پشتیبانی", "https://t.me/" + s.supportUsername).row()
             await bot.api.sendMessage(chat_id, text, {parse_mode: "MarkdownV2", reply_markup: keyboard})
+            return
         }
     }
     await bot.api.sendMessage(chat_id, text, {parse_mode: "MarkdownV2"})
