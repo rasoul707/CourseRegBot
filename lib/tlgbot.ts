@@ -21,7 +21,7 @@ export const sendMessage2User = async (chat_id: number, text: string, withSuppor
 }
 
 
-export const sendNotify2AdminChanel = async (text: string) => {
+export const sendNotify2AdminChanel = async (text: string, replyTo?: number) => {
     try {
         const token = process.env.TELEGRAM_BOT_TOKEN;
         if (!token) throw new Error("TELEGRAM_BOT_TOKEN is unset");
@@ -34,10 +34,13 @@ export const sendNotify2AdminChanel = async (text: string) => {
         })
 
         if (s.adminChannelId) {
-            const m = await bot.api.sendMessage(+s.adminChannelId, text, {parse_mode: "MarkdownV2"})
+            const m = await bot.api.sendMessage(+s.adminChannelId, text, {parse_mode: "MarkdownV2", reply_to_message_id: replyTo })
             return m.message_id
         }
+
+        return undefined
     } catch (e) {
         console.log(e, "###ADMIN-CHANNEL###")
     }
+    return undefined
 }

@@ -51,10 +51,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ok: false, error: "کلاس غیرفعال می باشد"}, {status: 403})
     }
     if (payment.success === true) {
-        return successPayment(payment.id)
+        return successPayment(payment.id, false)
     }
     if (payment.success === false) {
-        return failurePayment(payment.id)
+        return failurePayment(payment.id, false)
     }
 
 
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
                 success: false,
             },
         });
-        return await failurePayment(payment.id)
+        return await failurePayment(payment.id, true)
     }
     if (+status === 1) {
         try {
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
                         success: true,
                     },
                 });
-                return successPayment(payment.id)
+                return successPayment(payment.id, true)
             } else {
                 console.log("###VERIFYPAYMENT", 2)
                 // @ts-ignore
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
                         success: false,
                     },
                 });
-                return await failurePayment(payment.id)
+                return await failurePayment(payment.id, true)
             }
         } catch (e) {
             console.log("###VERIFYPAYMENT", 3)
@@ -135,13 +135,13 @@ export async function POST(request: NextRequest) {
                     success: false,
                 },
             });
-            return await failurePayment(payment.id)
+            return await failurePayment(payment.id, true)
         }
     }
 }
 
 
-const successPayment = async (id: number) => {
+const successPayment = async (id: number, sendNotif = false) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
         where: {id: id},
@@ -151,11 +151,15 @@ const successPayment = async (id: number) => {
         }
     })
 
-    let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
-    await sendMessage2User(p.userId, text)
+    let msgPaymentAdmin = undefined
 
-    const adminMgId = await sendNotify2AdminChanel
-(`
+
+    if (sendNotif) {
+        let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
+        await sendMessage2User(p.userId, text)
+
+        msgPaymentAdmin = await sendNotify2AdminChanel
+        (`
 مبلغ *${p.amount}* ریال بابت ثبت نام در کلاس *${p.course.title}* دریافت شد
 
 *کاربر:*
@@ -167,6 +171,7 @@ RefNumber: \`${p.refNumber}\`
 TrackingCode: \`${p.trackingCode}\`
 TransactionId: \`${p.transactionId}\`
 `)
+    }
 
     try {
         const body = {
@@ -192,21 +197,25 @@ TransactionId: \`${p.transactionId}\`
             {data: _data}
         )
 
-        let text = "*لایسنس شما:*"
-        text += "\n"
-        text += "```" + "License\n" + (license?.token || "-") + "```"
-        await sendMessage2User(p.userId, text)
+        if (sendNotif) {
+            let text = "*لایسنس شما:*"
+            text += "\n"
+            text += "```" + "License\n" + (license?.token || "-") + "```"
+            await sendMessage2User(p.userId, text)
 
 
-        await sendNotify2AdminChanel(`\`\`\`License:\n${license?.token || ""}\`\`\``)
+            await sendNotify2AdminChanel(`\`\`\`License:\n${license?.token || ""}\`\`\``, msgPaymentAdmin)
+        }
     } catch (e) {
 
-        let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
-        text += "\n"
-        text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
-        await sendMessage2User(p.userId, text, true)
+        if (sendNotif) {
+            let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
+            text += "\n"
+            text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
+            await sendMessage2User(p.userId, text, true)
 
-        await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌`)
+            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌`, msgPaymentAdmin)
+        }
 
         // @ts-ignore
         return NextResponse.json({
@@ -229,7 +238,7 @@ TransactionId: \`${p.transactionId}\`
 }
 
 
-const failurePayment = async (id: number) => {
+const failurePayment = async (id: number, sendNotif = false) => {
     // @ts-ignore
     const p = await prisma.Payment.findUnique({
         where: {id: id},
@@ -239,8 +248,9 @@ const failurePayment = async (id: number) => {
         }
     })
 
-    let text = "❌ ثبت نام شما در *" + p.course.title + "* با خطا مواجه شد"
-    await sendMessage2User(p.userId, text, true)
-
+    if (sendNotif) {
+        let text = "❌ ثبت نام شما در *" + p.course.title + "* با خطا مواجه شد"
+        await sendMessage2User(p.userId, text, true)
+    }
     return NextResponse.json({ok: false, orderId: p.id, refNumber: p.refNumber})
 }
