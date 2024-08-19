@@ -160,7 +160,7 @@ const successPayment = async (id: number, sendNotif = false) => {
 
         msgPaymentAdmin = await sendNotify2AdminChanel
         (`
-مبلغ *${p.amount}* ریال بابت ثبت نام در کلاس *${p.course.title}* دریافت شد
+مبلغ *${p.amount}* ریال بابت ثبت نام در *${p.course.title}* دریافت شد
 
 *کاربر:*
 [${p.user.firstName + (p.user.lastName ? " " + p.user.lastName : "")}](tg://user?id=${p.user.id})
