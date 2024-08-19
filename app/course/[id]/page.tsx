@@ -89,22 +89,14 @@ export default function Page({params}: { params: { id: string } }) {
     }
 
 
-
-
     useEffect(() => {
-        if(!!user) getCourse()
+        if (!!user) getCourse()
     }, [user]);
 
 
     useEffect(() => {
-        if(!!course) getLicense()
+        if (!!course) getLicense()
     }, [course]);
-
-
-
-
-
-
 
 
     const [paymentType, setPaymentType] = useState<"irr" | "usdt">("irr")
@@ -192,6 +184,7 @@ export default function Page({params}: { params: { id: string } }) {
         )
     }
 
+
     return (
         <div className="flex flex-col h-full justify-between p-2 overflow-x-hidden">
             <div className="flex flex-col gap-5">
@@ -216,8 +209,15 @@ export default function Page({params}: { params: { id: string } }) {
                 {!!license && (
                     <div className="flex flex-col items-start gap-2">
                         <span className="font-bold text-lg">لایسنس شما:</span>
-                        <Snippet variant="bordered" color="primary" fullWidth>
-                            {license.token}
+                        <Snippet
+                            variant="bordered"
+                            color="primary"
+                            fullWidth
+                            symbol=""
+                        >
+                            <span className="break-all text-wrap text-gray-500 text-base">
+                                {license.token}
+                            </span>
                         </Snippet>
                         <span className="font-light text-sm">
                             لایسنس را کپی کرده و در نرم افزار پیست کنید.
