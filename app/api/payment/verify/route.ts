@@ -196,9 +196,9 @@ TransactionId: \`${p.transactionId}\`
         }
 
         // @ts-ignore
-        const license = await prisma.License.create(
-            {data: _data}
-        )
+        const license = await prisma.License.create({
+            data: _data
+        })
 
         if (sendNotif) {
             let text = "*لایسنس شما:*"

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest, {params}: { params: { id: string
     const userId = params.id
 
     // @ts-ignore
-    const list = await prisma.Licesnse.findMany({
+    const list = await prisma.License.findMany({
         where: {
             userId: +userId
         },

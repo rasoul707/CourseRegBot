@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
 
     // @ts-ignore
-    const license = await prisma.Licesnse.findFirst(
+    const license = await prisma.License.findFirst(
         {
             where: {
                 courseId: +courseId,
