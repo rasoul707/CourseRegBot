@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 
 import prisma from "@/lib/prisma";
-import {axiosServer} from "@/lib/axiosServer";
 import axios from "axios";
 import {sha512} from "js-sha512";
 import {sendMessage2User, sendNotify2AdminChanel} from "@/lib/tlgbot";
@@ -155,19 +154,19 @@ const successPayment = async (id: number) => {
     let text = "✅ ثبت نام شما در *" + p.course.title + "* با موفقیت انجام شد"
     await sendMessage2User(p.userId, text)
 
-    const adminMgId = await sendNotify2AdminChanel
-(`
-مبلغ *${p.amount}* ریال بابت ثبت نام در کلاس *${p.course.title}* دریافت شد
-
-*کاربر:*
-[${p.user.firstName + (p.user.lastName ? " " + p.user.lastName : "")}](tg://user?id=${p.user.id})
-
-*مشخصات واریزی:*
-CardNumber: \`${p.cardNumber}\`
-RefNumber: \`${p.refNumber}\`
-TrackingCode: \`${p.trackingCode}\`
-TransactionId: \`${p.transactionId}\`
-`)
+//     const adminMgId = await sendNotify2AdminChanel
+// (`
+// مبلغ *${p.amount}* ریال بابت ثبت نام در کلاس *${p.course.title}* دریافت شد
+//
+// *کاربر:*
+// [${p.user.firstName + (p.user.lastName ? " " + p.user.lastName : "")}](tg://user?id=${p.user.id})
+//
+// *مشخصات واریزی:*
+// CardNumber: \`${p.cardNumber}\`
+// RefNumber: \`${p.refNumber}\`
+// TrackingCode: \`${p.trackingCode}\`
+// TransactionId: \`${p.transactionId}\`
+// `)
 
     try {
         const body = {
@@ -199,7 +198,7 @@ TransactionId: \`${p.transactionId}\`
         await sendMessage2User(p.userId, text)
 
 
-        await sendNotify2AdminChanel(`\`\`\`License:\n${license?.token || ""}\`\`\``)
+        // await sendNotify2AdminChanel(`\`\`\`License:\n${license?.token || ""}\`\`\``)
     } catch (e) {
 
         let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
@@ -207,7 +206,7 @@ TransactionId: \`${p.transactionId}\`
         text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
         await sendMessage2User(p.userId, text, true)
 
-        await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌`)
+        // await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌`)
 
         // @ts-ignore
         return NextResponse.json({

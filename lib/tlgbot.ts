@@ -20,20 +20,23 @@ export const sendMessage2User = async (chat_id: number, text: string, withSuppor
 }
 
 
-
 export const sendNotify2AdminChanel = async (text: string) => {
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    if (!token) throw new Error("TELEGRAM_BOT_TOKEN is unset");
+    try {
+        const token = process.env.TELEGRAM_BOT_TOKEN;
+        if (!token) throw new Error("TELEGRAM_BOT_TOKEN is unset");
 
-    const bot = new Bot(token);
+        const bot = new Bot(token);
 
-    // @ts-ignore
-    const s = await prisma.Setting.findUnique({
-        where: {id: 1},
-    })
+        // @ts-ignore
+        const s = await prisma.Setting.findUnique({
+            where: {id: 1},
+        })
 
-    if(s.adminChannelId) {
-        const m = await bot.api.sendMessage(+s.adminChannelId, text, {parse_mode: "MarkdownV2"})
-        return m.message_id
+        if (s.adminChannelId) {
+            const m = await bot.api.sendMessage(+s.adminChannelId, text, {parse_mode: "MarkdownV2"})
+            return m.message_id
+        }
+    } catch (e) {
+        console.log(e, "###ADMIN-CHANNEL###")
     }
 }
