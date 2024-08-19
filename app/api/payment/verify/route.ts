@@ -206,7 +206,7 @@ TransactionId: \`${p.transactionId}\`
 
             await sendNotify2AdminChanel(`\`\`\`License:\n${license?.token || ""}\`\`\``, msgPaymentAdmin)
         }
-    } catch (e) {
+    } catch (e: any) {
 
         if (sendNotif) {
             let text = "متاسفانه خطایی در تولید لایسنس *" + p.course.title + "* رخ داد"
@@ -214,7 +214,7 @@ TransactionId: \`${p.transactionId}\`
             text += "جهت دریافت لایسنس، با کارشناسان ما در ارتباط باشید"
             await sendMessage2User(p.userId, text, true)
 
-            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌`, msgPaymentAdmin)
+            await sendNotify2AdminChanel(`❌ لایسنس تولید نشد ❌\n\nخطا: ${e.ex.msg}`, msgPaymentAdmin)
         }
 
         // @ts-ignore
