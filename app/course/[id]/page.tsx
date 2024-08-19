@@ -222,6 +222,16 @@ export default function Page({params}: { params: { id: string } }) {
                         <span className="font-light text-sm">
                             لایسنس را کپی کرده و در نرم افزار پیست کنید.
                         </span>
+                        
+                    <Button
+                        fullWidth
+                        size="lg"
+                        color="primary"
+                        as="a"
+                        href="https://spotplayer.ir/#download"
+                    >
+                        دانلود اپلیکیشن
+                    </Button>
                     </div>
                 )}
                 {!license && (
