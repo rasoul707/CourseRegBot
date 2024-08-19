@@ -187,6 +187,8 @@ TransactionId: \`${p.transactionId}\`
         const {data} = await axios.post(process.env.SPOTPLAYER_LICENSE_BASE_URL!, body, {headers})
         const token = data.key
 
+        console.log(data, "SPOTKEY")
+
         const _data = {
             courseId: p.courseId,
             userId: p.userId,
