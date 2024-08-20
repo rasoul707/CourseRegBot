@@ -134,9 +134,7 @@ export default function Page({params}: { params: { id: string } }) {
                     // @ts-ignore
                     if (window?.Telegram?.WebApp) {
                         // @ts-ignore
-                        window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
-                    } else {
-                        router.push(`https://t.me/${username}?text=${text}`)
+                        window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}`)
                     }
                 }
             }, 2000)
@@ -318,7 +316,7 @@ export default function Page({params}: { params: { id: string } }) {
                             </Radio>
                             <Radio
                                 value="usdt"
-                                description="به زودی..."
+                                description="امکان پرداخت تتری"
                                 classNames={{labelWrapper: "gap-2",}}
                             >
                                 <span className="font-bold text-base">پرداخت تتری</span>
