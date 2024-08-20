@@ -359,7 +359,7 @@ export default function Page({params}: { params: { id: string } }) {
                                         دهید
                                         </p>
                                         <br/>
-                                        <p className="flex gap-1 items-center">
+                                        <p className="flex gap-1 items-center flex-wrap">
                                         در صورتیکه به پشتیبانی منتقل نشدید، به آیدی
                                         <a dir="ltr" href={`https://t.me/${setting.supportUsername}?text=${setting.usdtPaymentMessage}`} className="text-blue-400"> {"@" + setting?.supportUsername} </a>
                                         در تلگرام پیام دهید.
