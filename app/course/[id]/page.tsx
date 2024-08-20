@@ -134,7 +134,7 @@ export default function Page({params}: { params: { id: string } }) {
                     // @ts-ignore
                     if (window?.Telegram?.WebApp) {
                         // @ts-ignore
-                        window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}`)
+                        window?.Telegram?.WebApp?.openLink(`https://t.me/${username}`)
                     }
                 }
             }, 2000)
