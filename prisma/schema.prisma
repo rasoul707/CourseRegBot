@@ -8,32 +8,32 @@ datasource db {
 }
 
 model User {
-  id          Int        @id
+  id          BigInt    @id
   firstName   String?
   lastName    String?
   username    String?
   phoneNumber String?
-  isAdmin     Boolean    @default(false)
-  isActive    Boolean    @default(true)
+  isAdmin     Boolean   @default(false)
+  isActive    Boolean   @default(true)
   licenses    License[]
   payments    Payment[]
 }
 
 model Course {
-  id        Int        @id @default(autoincrement())
-  title     String
-  image     String
-  price     Int
-  isActive  Boolean    @default(true)
-  uuid      String
+  id       Int       @id @default(autoincrement())
+  title    String
+  image    String
+  price    Int
+  isActive Boolean   @default(true)
+  uuid     String
   licenses License[]
-  payments  Payment[]
+  payments Payment[]
 }
 
 model Payment {
   id            Int      @id @default(autoincrement())
   courseId      Int
-  userId        Int
+  userId        BigInt
   success       Boolean?
   cardNumber    String?
   refNumber     String?
@@ -47,14 +47,14 @@ model Payment {
 model License {
   id       Int    @id @default(autoincrement())
   courseId Int
-  userId   Int
+  userId   BigInt
   token    String
   course   Course @relation(fields: [courseId], references: [id])
   user     User   @relation(fields: [userId], references: [id])
 }
 
 model Setting {
-  id              Int @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   supportUsername String
   adminChannelId  String
 }

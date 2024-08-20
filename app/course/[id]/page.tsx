@@ -9,11 +9,14 @@ import {Image} from "@nextui-org/image";
 import {toast} from "@/lib/toast";
 import {Snippet} from "@nextui-org/snippet";
 import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
+import {useRouter} from "next/navigation";
 
 
 export default function Page({params}: { params: { id: string } }) {
 
     const courseId = params.id
+
+    const router = useRouter()
 
     useEffect(() => {
         initializing()
@@ -222,16 +225,23 @@ export default function Page({params}: { params: { id: string } }) {
                         <span className="font-light text-sm">
                             لایسنس را کپی کرده و در نرم افزار پیست کنید.
                         </span>
-                        
-                    <Button
-                        fullWidth
-                        size="lg"
-                        color="primary"
-                        as="a"
-                        href="https://spotplayer.ir/#download"
-                    >
-                        دانلود اپلیکیشن
-                    </Button>
+                        <Button
+                            fullWidth
+                            size="lg"
+                            color="primary"
+                            onPress={() => {
+                                // @ts-ignore
+                                if(window?.Telegram?.WebApp) {
+                                    // @ts-ignore
+                                    window?.Telegram?.WebApp?.openLink("https://spotplayer.ir/#download", {try_instant_view: true})
+                                }
+                                else {
+                                    router.push("https://spotplayer.ir/#download")
+                                }
+                            }}
+                        >
+                            دانلود اپلیکیشن
+                        </Button>
                     </div>
                 )}
                 {!license && (
