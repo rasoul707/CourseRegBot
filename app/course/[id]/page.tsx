@@ -366,6 +366,10 @@ export default function Page({params}: { params: { id: string } }) {
                                     <>
                                         برای پرداخت در قالب تتر، به پشتیبانی ما در تلگرام پیام داده و پرداخت را انجام
                                         دهید
+                                        <br/>
+                                        در صورتیکه به پشتیبانی منتقل نشدید، به آیدی
+                                        <a href={`https://t.me/${setting.supportUsername}?text=${setting.usdtPaymentMessage}`} className="text-blue-400"> {"@" + setting?.supportUsername} </a>
+                                        در تلگرام پیام دهید.
                                     </>
                                 )}
                             </ModalBody>
