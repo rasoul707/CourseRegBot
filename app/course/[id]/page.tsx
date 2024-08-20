@@ -91,7 +91,6 @@ export default function Page({params}: { params: { id: string } }) {
     }
 
 
-
     const getSetting = async () => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -125,24 +124,24 @@ export default function Page({params}: { params: { id: string } }) {
     const prePaymentModal = useDisclosure({defaultOpen: false});
 
     const prePayment = () => {
-        if(paymentType === "irr") prePaymentModal.onOpen()
-        if(paymentType === "usdt") {
+        if (paymentType === "irr") prePaymentModal.onOpen()
+        if (paymentType === "usdt") {
             toast.info("در حال اتصال به پشتیبانی جهت واریز تتری ...")
             setTimeout(() => {
-                // @ts-ignore
-                if(window?.Telegram?.WebApp && !!setting) {
+                if(!!setting) {
                     const username = setting?.supportUsername
                     const text = setting?.usdtPaymentMessage
                     // @ts-ignore
-                    window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
-                }
-                else {
-                    router.push("https://spotplayer.ir/#download")
+                    if (window?.Telegram?.WebApp) {
+                        // @ts-ignore
+                        window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
+                    } else {
+                        router.push(`https://t.me/${username}?text=${text}`)
+                    }
                 }
             }, 2000)
         }
     }
-
 
 
     const onStartPayment = async () => {
@@ -268,34 +267,34 @@ export default function Page({params}: { params: { id: string } }) {
                             color="secondary"
                             onPress={() => {
                                 // @ts-ignore
-                                if(window?.Telegram?.WebApp && course.tlgrmChannelLink) {
+                                if (window?.Telegram?.WebApp) {
                                     // @ts-ignore
-                                    window?.Telegram?.WebApp?.openTelegramLink(course.tlgrmChannelLink)
-                                }
-                                else {
-                                    router.push(course.tlgrmChannelLink)
-                                }
-                            }}
-                        >
-                            دانلود اپلیکیشن
-                        </Button>
-                        <Button
-                            fullWidth
-                            size="lg"
-                            color="primary"
-                            onPress={() => {
-                                // @ts-ignore
-                                if(window?.Telegram?.WebApp) {
-                                    // @ts-ignore
-                                    window?.Telegram?.WebApp?.openLink("https://t.me", {try_instant_view: true})
-                                }
-                                else {
+                                    window?.Telegram?.WebApp?.openLink("https://spotplayer.ir/#download", {try_instant_view: true})
+                                } else {
                                     router.push("https://spotplayer.ir/#download")
                                 }
                             }}
                         >
                             دانلود اپلیکیشن
                         </Button>
+                        {course?.tlgrmChannelLink && (
+                            <Button
+                                fullWidth
+                                size="lg"
+                                color="primary"
+                                onPress={() => {
+                                    // @ts-ignore
+                                    if (window?.Telegram?.WebApp && course.tlgrmChannelLink) {
+                                        // @ts-ignore
+                                        window?.Telegram?.WebApp?.openTelegramLink(course.tlgrmChannelLink)
+                                    } else {
+                                        router.push(course.tlgrmChannelLink)
+                                    }
+                                }}
+                            >
+                                کانال تلگرام کلاس
+                            </Button>
+                        )}
                     </div>
                 )}
                 {!license && (

@@ -64,9 +64,10 @@ const showMainMenu = async (ctx: any) => {
     const {data: resultUser} = await axiosServer.get(`user/${ctx.from.id}`)
     const {data: resultCourses} = await axiosServer.get("course")
 
+    const _courses = resultCourses.courses.filter(({isActive}: {isActive: boolean}) => (isActive))
 
-    if (!resultCourses.courses?.length) {
-        const text = "هنوز هیچ کلاسی پیدا نشد، مجددا بعدا تلاش کنید"
+    if (!_courses?.length) {
+        const text = "هیچ کلاس فعالی یافت نشد، مجددا تلاش کنید!"
         const keyboard = new InlineKeyboard()
 
         // @ts-ignore
@@ -85,9 +86,11 @@ const showMainMenu = async (ctx: any) => {
         const text = "کلاس را انتخاب کنید:"
         const keyboard = new InlineKeyboard()
 
-        for (let i = 0; i < resultCourses.courses.length; i++) {
-            const c = resultCourses.courses[i]
-            if (c.isActive) keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
+
+
+        for (let i = 0; i < _courses.length; i++) {
+            const c = _courses[i]
+            keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
         }
 
         // @ts-ignore
