@@ -177,8 +177,24 @@ TransactionId: \`${p.transactionId}\`
         const body = {
             course: [p.course.uuid],
             name: `${p.user.firstName}${p.user.lastName ? " " + p.user.lastName : ""} - ${"0" + p.user.phoneNumber?.substring(3)}`,
-            watermark: {texts: [{text: "0" + p.user.phoneNumber?.substring(3) || "-"}]},
+            watermark: {
+                texts: [
+                    {
+                        text: "0" + p.user.phoneNumber?.substring(3) || "-",
+                        "color": 2164260863,
+                    }
+                ]
+            },
             payload: `OrderId_${p.id}_TgId_${p.user.id}`,
+            device: {
+                "p0": 2, // All Devices 1-99
+                "p1": 1, // Windows 0-99
+                "p2": 1, // MacOS 0-99
+                "p3": 1, // Ubuntu 0-99
+                "p4": 1, // Android 0-99
+                "p5": 1,  // IOS 0-99
+                "p6": 1,  // WebApp 0-99
+            },
         }
         const headers = {
             "$API": process.env.SPOTPLAYER_LICENSE_API_KEY,

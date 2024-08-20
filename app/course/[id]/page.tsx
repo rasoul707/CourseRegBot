@@ -217,13 +217,16 @@ export default function Page({params}: { params: { id: string } }) {
                             color="primary"
                             fullWidth
                             symbol=""
+                            classNames={{
+                                pre: "w-[calc(100%-40px)]"
+                            }}
                         >
-                            <span className="break-all text-wrap text-gray-500 text-base">
+                            <span className="text-gray-500 text-base w-full select-all overflow-hidden block">
                                 {license.token}
                             </span>
                         </Snippet>
                         <span className="font-light text-sm">
-                            لایسنس را کپی کرده و در نرم افزار پیست کنید.
+                            لایسنس را کپی کرده و در اپلیکیشن پیست کنید.
                         </span>
                         <Button
                             fullWidth
