@@ -20,14 +20,15 @@ model User {
 }
 
 model Course {
-  id       Int       @id @default(autoincrement())
-  title    String
-  image    String
-  price    Int
-  isActive Boolean   @default(true)
-  uuid     String
-  licenses License[]
-  payments Payment[]
+  id               Int       @id @default(autoincrement())
+  title            String
+  image            String
+  price            Int
+  isActive         Boolean   @default(true)
+  uuid             String
+  tlgrmChannelLink String?
+  licenses         License[]
+  payments         Payment[]
 }
 
 model Payment {
@@ -54,7 +55,8 @@ model License {
 }
 
 model Setting {
-  id              Int    @id @default(autoincrement())
-  supportUsername String
-  adminChannelId  String
+  id                 Int     @id @default(autoincrement())
+  supportUsername    String
+  adminChannelId     String
+  usdtPaymentMessage String?
 }

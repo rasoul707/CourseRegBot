@@ -37,6 +37,7 @@ export default function Page({params}: { params: { id: string } }) {
     const [course, setCourse] = useState<any>(null)
     const [user, setUser] = useState<any>(null)
     const [license, setLicense] = useState<any>(null)
+    const [setting, setSetting] = useState<any>(null)
 
 
     const auth = async () => {
@@ -80,11 +81,26 @@ export default function Page({params}: { params: { id: string } }) {
             try {
                 const {data} = await axiosNoAuth.get(`/user/${user.id}/course/${course.id}/license`)
                 setLicense(data.license)
-                setLoading(false)
                 resolve(data.license)
             } catch (e) {
                 console.error(e)
                 setLicense(null)
+                resolve(false)
+            }
+        })
+    }
+
+
+
+    const getSetting = async () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const {data} = await axiosNoAuth.get(`setting`)
+                setSetting(data.setting)
+                setLoading(false)
+            } catch (e) {
+                console.error(e)
+                setSetting(null)
                 setLoading(false)
                 resolve(false)
             }
@@ -99,6 +115,7 @@ export default function Page({params}: { params: { id: string } }) {
 
     useEffect(() => {
         if (!!course) getLicense()
+        getSetting()
     }, [course]);
 
 
@@ -108,8 +125,25 @@ export default function Page({params}: { params: { id: string } }) {
     const prePaymentModal = useDisclosure({defaultOpen: false});
 
     const prePayment = () => {
-        prePaymentModal.onOpen()
+        if(paymentType === "irr") prePaymentModal.onOpen()
+        if(paymentType === "usdt") {
+            toast.info("در حال اتصال به پشتیبانی جهت واریز تتری ...")
+            setTimeout(() => {
+                // @ts-ignore
+                if(window?.Telegram?.WebApp && !!setting) {
+                    const username = setting?.supportUsername
+                    const text = setting?.usdtPaymentMessage
+                    // @ts-ignore
+                    window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
+                }
+                else {
+                    router.push("https://spotplayer.ir/#download")
+                }
+            }, 2000)
+        }
     }
+
+
 
     const onStartPayment = async () => {
         setPaymentLoading(true)
@@ -231,12 +265,29 @@ export default function Page({params}: { params: { id: string } }) {
                         <Button
                             fullWidth
                             size="lg"
+                            color="secondary"
+                            onPress={() => {
+                                // @ts-ignore
+                                if(window?.Telegram?.WebApp && course.tlgrmChannelLink) {
+                                    // @ts-ignore
+                                    window?.Telegram?.WebApp?.openTelegramLink(course.tlgrmChannelLink)
+                                }
+                                else {
+                                    router.push(course.tlgrmChannelLink)
+                                }
+                            }}
+                        >
+                            دانلود اپلیکیشن
+                        </Button>
+                        <Button
+                            fullWidth
+                            size="lg"
                             color="primary"
                             onPress={() => {
                                 // @ts-ignore
                                 if(window?.Telegram?.WebApp) {
                                     // @ts-ignore
-                                    window?.Telegram?.WebApp?.openLink("https://spotplayer.ir/#download", {try_instant_view: true})
+                                    window?.Telegram?.WebApp?.openLink("https://t.me", {try_instant_view: true})
                                 }
                                 else {
                                     router.push("https://spotplayer.ir/#download")
@@ -270,7 +321,6 @@ export default function Page({params}: { params: { id: string } }) {
                                 value="usdt"
                                 description="به زودی..."
                                 classNames={{labelWrapper: "gap-2",}}
-                                isDisabled
                             >
                                 <span className="font-bold text-base">پرداخت تتری</span>
                             </Radio>

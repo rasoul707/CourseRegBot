@@ -73,7 +73,7 @@ const showMainMenu = async (ctx: any) => {
         const s = await prisma.Setting.findUnique({
             where: {id: 1},
         })
-        if(s?.supportUsername) keyboard.url("پشتیبانی" , "https://t.me/" + s.supportUsername).row()
+        if (s?.supportUsername) keyboard.url("پشتیبانی", "https://t.me/" + s.supportUsername).row()
 
 
         if (resultUser.user.isAdmin) {
@@ -87,14 +87,14 @@ const showMainMenu = async (ctx: any) => {
 
         for (let i = 0; i < resultCourses.courses.length; i++) {
             const c = resultCourses.courses[i]
-            keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
+            if (c.isActive) keyboard.webApp(c.title, `${process.env.NEXT_PUBLIC_BASE_URL}course/${c.id}`).row()
         }
 
         // @ts-ignore
         const s = await prisma.Setting.findUnique({
             where: {id: 1},
         })
-        if(s?.supportUsername) keyboard.url("پشتیبانی" , "https://t.me/" + s.supportUsername).row()
+        if (s?.supportUsername) keyboard.url("پشتیبانی", "https://t.me/" + s.supportUsername).row()
 
         if (resultUser.user.isAdmin) {
             keyboard.webApp("پنل مدیریت", `${process.env.NEXT_PUBLIC_BASE_URL}admin`).row()

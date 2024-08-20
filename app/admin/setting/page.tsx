@@ -5,7 +5,7 @@ import {Card, CardBody, CardFooter, CardHeader} from "@nextui-org/card";
 import {Button} from "@nextui-org/button";
 import React, {useEffect, useState} from "react";
 import {axiosNoAuth} from "@/lib/axios";
-import {Input} from "@nextui-org/input";
+import {Input, Textarea} from "@nextui-org/input";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "@/lib/toast";
 import {z} from "zod";
@@ -33,6 +33,7 @@ export default function Page() {
     type SettingFormType = {
         supportUsername: string;
         adminChannelId: string;
+        usdtPaymentMessage: string;
     };
 
 
@@ -41,6 +42,7 @@ export default function Page() {
             {
                 supportUsername: data?.supportUsername || "",
                 adminChannelId: data?.adminChannelId || "",
+                usdtPaymentMessage: data?.usdtPaymentMessage || "",
             })
     }, [data])
 
@@ -57,6 +59,7 @@ export default function Page() {
 
     const {...supportUsernameField} = register("supportUsername")
     const {...adminChannelIdField} = register("adminChannelId")
+    const {...usdtPaymentMessageField} = register("usdtPaymentMessage")
 
 
     const onSubmit: SubmitHandler<SettingFormType> = async (_data) => {
@@ -68,6 +71,7 @@ export default function Page() {
         const shape = {
             supportUsername: z.string().min(4, "یوزرنیم پشتبان معتبر نیست"),
             adminChannelId: z.string().regex(/^-\d+$/, "آیدی چنل ادمین معتبر نیست"),
+            usdtPaymentMessage: z.string().min(10, "حداقل می بایست ده کاراکتر باشد"),
         }
         const {success, data, error} = z.object(shape).safeParse(_data);
         if (!success) {
@@ -127,6 +131,14 @@ export default function Page() {
                                 isInvalid={!!errors.adminChannelId}
                                 errorMessage={errors.adminChannelId?.message}
                                 description="شناسه عددی کانال: 14514523655"
+                            />
+                            <Textarea
+                                label="پیام آماده واریز تتری"
+                                {...usdtPaymentMessageField}
+                                // isDisabled={isSubmitSuccessful}
+                                isReadOnly={isSubmitting || isDataLoading}
+                                isInvalid={!!errors.usdtPaymentMessage}
+                                errorMessage={errors.usdtPaymentMessage?.message}
                             />
                         </form>
                     )}

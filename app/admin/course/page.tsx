@@ -172,6 +172,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
         price: string;
         uuid: string;
         isActive: boolean;
+        tlgrmChannelLink: string;
     };
 
 
@@ -200,8 +201,9 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                 title: course?.title || "",
                 image: course?.image || "",
                 price: course?.price.toString() || "",
-                isActive: course?.isActive || true,
-                uuid: course?.uuid || ""
+                isActive: course?.isActive === null ? true : course?.isActive,
+                uuid: course?.uuid || "",
+                tlgrmChannelLink: course?.tlgrmChannelLink || ""
             })
     }, [course])
 
@@ -221,6 +223,8 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
     const {...priceField} = register("price")
     const {...isActiveField} = register("isActive", {value: true})
     const {...uuidField} = register("uuid")
+    const {...tlgrmChannelLinkField} = register("tlgrmChannelLink")
+
 
 
     const onSubmit: SubmitHandler<CourseFormType> = async (_data) => {
@@ -235,6 +239,7 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
             price: z.string().regex(/^\d+$/, "قیمت نامعتبر است").transform(Number),
             isActive: z.boolean(),
             uuid: z.string().min(8, "شناسه کوتاه است"),
+            tlgrmChannelLink: z.string().url("آدرس کانال معتبر نیست"),
         }
         const {success, data, error} = z.object(shape).safeParse(_data);
         if (!success) {
@@ -336,6 +341,16 @@ const AddCourseModal = ({state, id, update}: { state: UseDisclosureReturn; id: n
                                             isInvalid={!!errors.uuid}
                                             errorMessage={errors.uuid?.message}
                                             description="شناسه ارجاع در اپلیکیشن مربوط وارد شود"
+                                        />
+                                        <Input
+                                            label="لینک کانال تلگرام"
+                                            dir="ltr"
+                                            {...tlgrmChannelLinkField}
+                                            isDisabled={isSubmitSuccessful}
+                                            isReadOnly={isSubmitting}
+                                            isInvalid={!!errors.tlgrmChannelLink}
+                                            errorMessage={errors.tlgrmChannelLink?.message}
+                                            description="لینک کانال تلگرام مربوط به کلاس وارد شود"
                                         />
                                         <Checkbox
                                             {...isActiveField}
