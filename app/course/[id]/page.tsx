@@ -124,26 +124,33 @@ export default function Page({params}: { params: { id: string } }) {
     const prePaymentModal = useDisclosure({defaultOpen: false});
 
     const prePayment = () => {
-        if (paymentType === "irr") prePaymentModal.onOpen()
-        if (paymentType === "usdt") {
-            toast.info("در حال اتصال به پشتیبانی جهت واریز تتری ...")
-            setTimeout(() => {
-                if(!!setting) {
-                    const username = setting?.supportUsername
-                    const text = setting?.usdtPaymentMessage
-                    // @ts-ignore
-                    if (window?.Telegram?.WebApp) {
-                        // @ts-ignore
-                        window?.Telegram?.WebApp?.openLink(`https://t.me/${username}`)
-                    }
-                }
-            }, 2000)
-        }
+        prePaymentModal.onOpen()
     }
 
 
     const onStartPayment = async () => {
         setPaymentLoading(true)
+
+        if (paymentType === "usdt") {
+            toast.info("در حال اتصال به پشتیبانی جهت واریز تتری ...")
+            setTimeout(() => {
+                if (!!setting) {
+                    const username = setting?.supportUsername
+                    const text = setting?.usdtPaymentMessage
+                    try {
+                        // @ts-ignore
+                        if (window?.Telegram?.WebApp) {
+                            // @ts-ignore
+                            window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
+                        }
+                    } catch (e) {
+                        router.push(`https://t.me/${username}?text=${text}`)
+                    }
+                }
+            }, 2000)
+            return
+        }
+
         try {
             const _data = {
                 userId: user.id,
@@ -152,7 +159,7 @@ export default function Page({params}: { params: { id: string } }) {
             }
             const {data} = await axiosNoAuth.post(`/payment`, _data)
             if (data.ok) {
-                toast.success("در حال انتقال به درگاه پرداخت ...")
+                toast.info("در حال انتقال به درگاه پرداخت ...")
                 setTimeout(() => {
                     window.location.href = data.url
                 }, 1000)
@@ -344,10 +351,25 @@ export default function Page({params}: { params: { id: string } }) {
                         isDismissable
                     >
                         <ModalContent>
-                            <ModalHeader>پرداخت</ModalHeader>
+                            <ModalHeader>
+                                پرداخت
+                            </ModalHeader>
+                            {/**/}
                             <ModalBody>
-                                لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک کنید
+                                {paymentType === "irr" && (
+                                    <>
+                                        لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک
+                                        کنید
+                                    </>
+                                )}
+                                {paymentType === "usdt" && (
+                                    <>
+                                        برای پرداخت در قالب تتر، به پشتیبانی ما در تلگرام پیام داده و پرداخت را انجام
+                                        دهید
+                                    </>
+                                )}
                             </ModalBody>
+
                             <ModalFooter>
                                 <Button
                                     variant="shadow"
@@ -355,7 +377,8 @@ export default function Page({params}: { params: { id: string } }) {
                                     onPress={onStartPayment}
                                     isLoading={isPaymentLoading}
                                 >
-                                    پرداخت
+                                    {paymentType === "irr" && "پرداخت"}
+                                    {paymentType === "usdt" && "انتقال به پشتیبانی"}
                                 </Button>
                             </ModalFooter>
                         </ModalContent>
