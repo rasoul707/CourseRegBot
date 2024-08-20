@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          BigInt    @id
+  id          Int    @id
   firstName   String?
   lastName    String?
   username    String?
@@ -34,7 +34,7 @@ model Course {
 model Payment {
   id            Int      @id @default(autoincrement())
   courseId      Int
-  userId        BigInt
+  userId        Int
   success       Boolean?
   cardNumber    String?
   refNumber     String?
@@ -48,7 +48,7 @@ model Payment {
 model License {
   id       Int    @id @default(autoincrement())
   courseId Int
-  userId   BigInt
+  userId   Int
   token    String
   course   Course @relation(fields: [courseId], references: [id])
   user     User   @relation(fields: [userId], references: [id])
