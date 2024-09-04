@@ -129,29 +129,17 @@ export default function Page({params}: { params: { id: string } }) {
 
 
     const onStartPayment = async () => {
-        setPaymentLoading(true)
-
         if (paymentType === "usdt") {
-            toast.info("در حال اتصال به پشتیبانی جهت واریز تتری ...")
-            setTimeout(() => {
                 if (!!setting) {
                     const username = setting?.supportUsername
                     const text = setting?.usdtPaymentMessage
-                    try {
-                        // @ts-ignore
-                        if (window?.Telegram?.WebApp) {
-                            // @ts-ignore
-                            window?.Telegram?.WebApp?.openTelegramLink(`https://t.me/${username}?text=${text}`)
-                        }
-                    } catch (e) {
-                        router.push(`https://t.me/${username}?text=${text}`)
-                    }
+                    router.push(`https://t.me/${username}?text=${text}`)
                 }
-            }, 2000)
             return
         }
 
         try {
+            setPaymentLoading(true)
             const _data = {
                 userId: user.id,
                 courseId: course.id,
@@ -357,20 +345,26 @@ export default function Page({params}: { params: { id: string } }) {
                             {/**/}
                             <ModalBody>
                                 {paymentType === "irr" && (
-                                    <>
+                                    <div>
+                                        <p className="flex gap-1 items-center">
                                         لطفا قبل از ادامه پرداخت فیلترشکن خود را خاموش کنید و سپس بر روی پرداخت کلیک
                                         کنید
-                                    </>
+                                        </p>
+                                    </div>
                                 )}
                                 {paymentType === "usdt" && (
-                                    <>
+                                    <div>
+                                        <p className="flex gap-1 items-center">
                                         برای پرداخت در قالب تتر، به پشتیبانی ما در تلگرام پیام داده و پرداخت را انجام
                                         دهید
+                                        </p>
                                         <br/>
+                                        <p className="flex gap-1 items-center flex-wrap">
                                         در صورتیکه به پشتیبانی منتقل نشدید، به آیدی
-                                        <a dir="ltr" href={`https://t.me/${setting.supportUsername}?text=${setting.usdtPaymentMessage}`} className="text-blue-400 inline-block w-fit"> {"@" + setting?.supportUsername} </a>
+                                        <a dir="ltr" href={`https://t.me/${setting.supportUsername}?text=${setting.usdtPaymentMessage}`} className="text-blue-400"> {"@" + setting?.supportUsername} </a>
                                         در تلگرام پیام دهید.
-                                    </>
+                                        </p>
+                                    </div>
                                 )}
                             </ModalBody>
 
@@ -382,7 +376,7 @@ export default function Page({params}: { params: { id: string } }) {
                                     isLoading={isPaymentLoading}
                                 >
                                     {paymentType === "irr" && "پرداخت"}
-                                    {paymentType === "usdt" && "انتقال به پشتیبانی"}
+                                    {paymentType === "usdt" && "پشتیبانی"}
                                 </Button>
                             </ModalFooter>
                         </ModalContent>
