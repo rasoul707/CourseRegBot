@@ -14,7 +14,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Build app
-RUN npx prisma migrate dev --name init
+RUN npx prisma generate
 
 # Build app
 RUN npm run build:app
