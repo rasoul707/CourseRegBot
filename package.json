@@ -8,7 +8,7 @@
 		"start": "next start -p 3001",
 		"build:app": "next build",
 		"build:bot": "npx tsc -p bot",
-		"start:app": "next start -p 3001",
+		"start:app": "next start",
 		"start:bot": "node bot",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
