@@ -67,7 +67,7 @@ const showMainMenu = async (ctx: any) => {
     const _courses = resultCourses.courses.filter(({isActive}: {isActive: boolean}) => (isActive))
 
     if (!_courses?.length) {
-        const text = "هیچ کلاس فعالی یافت نشد، مجددا تلاش کنید!"
+        const text = "هیچ کلاس فعالی یافت نشد، مجددا تلاش کنید."
         const keyboard = new InlineKeyboard()
 
         // @ts-ignore
