@@ -13,10 +13,6 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application files
 COPY . .
 
-
-# Prisma generate
-RUN npm run build:app
-
 # Build app
 RUN npm run build:app
 
