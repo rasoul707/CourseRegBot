@@ -5,7 +5,7 @@ import {Providers} from "./providers";
 
 import {siteConfig} from "@/config/site";
 import {IRANSansX} from "@/lib/font";
-import {Button} from "@nextui-org/button";
+import {Button} from "@heroui/button";
 import React, {Suspense} from "react";
 
 export const metadata: Metadata = {

@@ -1,15 +1,15 @@
 "use client"
 
 
-import {Card, CardBody, CardFooter, CardHeader} from "@nextui-org/card";
-import {Button} from "@nextui-org/button";
+import {Card, CardBody, CardFooter, CardHeader} from "@heroui/card";
+import {Button} from "@heroui/button";
 import React, {useEffect, useState} from "react";
 import {axiosNoAuth} from "@/lib/axios";
-import {Input, Textarea} from "@nextui-org/input";
+import {Input, Textarea} from "@heroui/input";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {toast} from "@/lib/toast";
 import {z} from "zod";
-import {Spinner} from "@nextui-org/spinner";
+import {Spinner} from "@heroui/spinner";
 
 
 export default function Page() {

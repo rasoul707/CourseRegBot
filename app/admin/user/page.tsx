@@ -1,16 +1,16 @@
 "use client"
 
 
-import {Card, CardBody, CardHeader} from "@nextui-org/card";
-import {Button} from "@nextui-org/button";
+import {Card, CardBody, CardHeader} from "@heroui/card";
+import {Button} from "@heroui/button";
 import React, {useEffect, useState} from "react";
 import {axiosNoAuth} from "@/lib/axios";
-import {Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/table";
-import {Chip} from "@nextui-org/chip";
-import {Tooltip} from "@nextui-org/tooltip";
-import {EyeIcon, InfoIcon} from "@nextui-org/shared-icons";
-import {Spinner} from "@nextui-org/spinner";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
+import {Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@heroui/table";
+import {Chip} from "@heroui/chip";
+import {Tooltip} from "@heroui/tooltip";
+import {EyeIcon, InfoIcon} from "@heroui/shared-icons";
+import {Spinner} from "@heroui/spinner";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/modal";
 
 
 

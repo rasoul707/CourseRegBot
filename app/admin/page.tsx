@@ -1,7 +1,7 @@
 "use client"
 
 
-import {Card, CardBody, CardHeader} from "@nextui-org/card";
+import {Card, CardBody, CardHeader} from "@heroui/card";
 import {axiosNoAuth} from "@/lib/axios";
 import {useEffect, useState} from "react";
 

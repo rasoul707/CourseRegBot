@@ -1,14 +1,14 @@
 "use client"
 
-import {Radio, RadioGroup} from "@nextui-org/radio";
+import {Radio, RadioGroup} from "@heroui/radio";
 import React, {useEffect, useState} from "react";
 import {axiosNoAuth} from "@/lib/axios";
-import {Button} from "@nextui-org/button";
-import {Spinner} from "@nextui-org/spinner";
-import {Image} from "@nextui-org/image";
+import {Button} from "@heroui/button";
+import {Spinner} from "@heroui/spinner";
+import {Image} from "@heroui/image";
 import {toast} from "@/lib/toast";
-import {Snippet} from "@nextui-org/snippet";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
+import {Snippet} from "@heroui/snippet";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/modal";
 import {useRouter} from "next/navigation";
 
 

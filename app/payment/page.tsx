@@ -2,9 +2,9 @@
 
 import React, {useEffect, useRef, useState} from "react";
 import {useSearchParams} from "next/navigation";
-import {Spinner} from "@nextui-org/spinner";
+import {Spinner} from "@heroui/spinner";
 import {axiosNoAuth} from "@/lib/axios";
-import {Button} from "@nextui-org/button";
+import {Button} from "@heroui/button";
 import {toast} from "@/lib/toast";
 
 

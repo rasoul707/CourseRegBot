@@ -1,21 +1,21 @@
 "use client"
 
 
-import {Card, CardBody, CardHeader} from "@nextui-org/card";
-import {Button} from "@nextui-org/button";
+import {Card, CardBody, CardHeader} from "@heroui/card";
+import {Button} from "@heroui/button";
 import React, {useEffect, useState} from "react";
 import {axiosNoAuth} from "@/lib/axios";
-import {Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/table";
-import {Chip} from "@nextui-org/chip";
-import {Image} from "@nextui-org/image";
-import {Tooltip} from "@nextui-org/tooltip";
-import {EditIcon} from "@nextui-org/shared-icons";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/modal";
-import {UseDisclosureReturn} from "@nextui-org/use-disclosure";
-import {Input} from "@nextui-org/input";
+import {Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@heroui/table";
+import {Chip} from "@heroui/chip";
+import {Image} from "@heroui/image";
+import {Tooltip} from "@heroui/tooltip";
+import {EditIcon} from "@heroui/shared-icons";
+import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/modal";
+import {UseDisclosureReturn} from "@heroui/use-disclosure";
+import {Input} from "@heroui/input";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {Checkbox} from "@nextui-org/checkbox";
-import {Spinner} from "@nextui-org/spinner";
+import {Checkbox} from "@heroui/checkbox";
+import {Spinner} from "@heroui/spinner";
 import {toast} from "@/lib/toast";
 import {z} from "zod";
 

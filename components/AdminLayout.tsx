@@ -2,11 +2,11 @@
 
 import React, {useEffect, useState} from "react";
 
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/navbar";
-import {Link} from "@nextui-org/link";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@heroui/navbar";
+import {Link} from "@heroui/link";
 import {usePathname} from "next/navigation";
 import {axiosNoAuth} from "@/lib/axios";
-import {Spinner} from "@nextui-org/spinner";
+import {Spinner} from "@heroui/spinner";
 
 
 export default function AdminLayout({children}: { children: React.ReactNode; }) {
