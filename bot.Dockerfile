@@ -13,6 +13,9 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application files
 COPY . .
 
+# Prisma
+RUN npx prisma generate
+
 # Build bot
 RUN npm run build:bot
 
