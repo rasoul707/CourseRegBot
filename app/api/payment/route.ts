@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     try {
         const amount = payment.amount
         const invoiceNumber = payment.id
-        const customerPhoneNumber = user.phoneNumber
+        const customerPhoneNumber = "0" + user.phoneNumber.substring(3)
         const callbackUrl = process.env.PAYDEX_CALLBACK_URL
         const body = {
             amount,
