@@ -82,39 +82,81 @@ export async function POST(request: NextRequest) {
     });
 
 
+
+    // ############################## PAYDEX ##############################
+
     try {
         const amount = payment.amount
-        const order_id = payment.id
-        const callback = process.env.PAYSTAR_CALLBACK_BASE_URL + "payment"
-        const sign = sha512.hmac(process.env.PAYSTAR_GATEWAY_KEY!, `${amount}#${order_id}#${callback}`);
-        const callback_method = 1
+        const invoiceNumber = payment.id
+        const customerPhoneNumber = user.phoneNumber
+        const callbackUrl = process.env.PAYDEX_CALLBACK_URL
         const body = {
             amount,
-            order_id,
-            callback,
-            sign,
-            callback_method
+            invoiceNumber,
+            customerPhoneNumber,
+            callbackUrl,
         }
         const headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
+            "x-api-key": process.env.PAYDEX_API_KEY
         }
-        const {data} = await axios.post(process.env.PAYSTAR_CREATE_PAYMENT_BASE_URL!, body, {headers})
-        if (+data.status === 1) {
+        const {data} = await axios.post(process.env.PAYDEX_BASE_URL!, body, {headers})
+        if (!data.error) {
             // @ts-ignore
             await prisma.Payment.update({
                 where: {
                     id: payment.id,
                 },
                 data: {
-                    refNumber: data.data.ref_num
+                    refNumber: data.transactionId,
                 },
             });
-            return NextResponse.json({ok: true, url: `${process.env.PAYSTAR_GATEWAY_PAYMENT_BASE_URL!}?token=${data.data.token}`})
+            return NextResponse.json({ok: true, url: `${data.pspUrl}`})
         }
         return NextResponse.json({ok: false, error: "پاسخ مناسبی از درگاه دریافت نشد"}, {status: 401})
     } catch (e) {
         console.log("###Payment", e)
         return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
     }
+
+
+
+
+    // ############################## PAYSTAR ##############################
+
+    // try {
+    //     const amount = payment.amount
+    //     const order_id = payment.id
+    //     const callback = process.env.PAYSTAR_CALLBACK_BASE_URL + "payment"
+    //     const sign = sha512.hmac(process.env.PAYSTAR_GATEWAY_KEY!, `${amount}#${order_id}#${callback}`);
+    //     const callback_method = 1
+    //     const body = {
+    //         amount,
+    //         order_id,
+    //         callback,
+    //         sign,
+    //         callback_method
+    //     }
+    //     const headers = {
+    //         "Content-Type": "application/json",
+    //         "Authorization": "Bearer " + process.env.PAYSTAR_GATEWAY_ID
+    //     }
+    //     const {data} = await axios.post(process.env.PAYSTAR_CREATE_PAYMENT_BASE_URL!, body, {headers})
+    //     if (+data.status === 1) {
+    //         // @ts-ignore
+    //         await prisma.Payment.update({
+    //             where: {
+    //                 id: payment.id,
+    //             },
+    //             data: {
+    //                 refNumber: data.data.ref_num
+    //             },
+    //         });
+    //         return NextResponse.json({ok: true, url: `${process.env.PAYSTAR_GATEWAY_PAYMENT_BASE_URL!}?token=${data.data.token}`})
+    //     }
+    //     return NextResponse.json({ok: false, error: "پاسخ مناسبی از درگاه دریافت نشد"}, {status: 401})
+    // } catch (e) {
+    //     console.log("###Payment", e)
+    //     return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
+    // }
 }
