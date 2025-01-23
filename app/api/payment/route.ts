@@ -82,7 +82,6 @@ export async function POST(request: NextRequest) {
     });
 
 
-
     // ############################## PAYDEX ##############################
 
     try {
@@ -100,7 +99,7 @@ export async function POST(request: NextRequest) {
             "Content-Type": "application/json",
             "x-api-key": process.env.PAYDEX_API_KEY
         }
-        const {data} = await axios.post(process.env.PAYDEX_BASE_URL!, body, {headers})
+        const {data} = await axios.post(process.env.PAYDEX_BASE_URL + "/stores/transactions/invoice", body, {headers})
         if (!data.error) {
             // @ts-ignore
             await prisma.Payment.update({
@@ -118,8 +117,6 @@ export async function POST(request: NextRequest) {
         console.log("###Payment", e)
         return NextResponse.json({ok: false, error: "پاسخی از درگاه دریافت نشد"}, {status: 401})
     }
-
-
 
 
     // ############################## PAYSTAR ##############################
